@@ -1,4 +1,4 @@
-import { PerspectiveCamera, DirectionalLight, Light, MeshStandardMaterial, RGBEEncoding, LinearEncoding, Matrix4, BufferGeometry, BufferAttribute, Vector3, Box3, Spherical, Vector2, LinearToneMapping, ReinhardToneMapping, Uncharted2ToneMapping, CineonToneMapping, ACESFilmicToneMapping } from 'three';
+import { PerspectiveCamera, DirectionalLight, Light, MeshStandardMaterial, RGBEEncoding, LinearEncoding, Matrix4, BufferGeometry, BufferAttribute, Vector3, Box3, Spherical, Vector2, LinearToneMapping, ReinhardToneMapping, CineonToneMapping, ACESFilmicToneMapping } from 'three';
 
 const ThinMaterial = 1;
 const ThickMaterial = 2;
