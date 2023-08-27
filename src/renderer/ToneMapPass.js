@@ -5,7 +5,6 @@ import * as THREE from 'three';
 const toneMapFunctions = {
   [THREE.LinearToneMapping]: 'linear',
   [THREE.ReinhardToneMapping]: 'reinhard',
-  [THREE.Uncharted2ToneMapping]: 'uncharted2',
   [THREE.CineonToneMapping]: 'cineon',
   [THREE.ACESFilmicToneMapping]: 'acesFilmic'
 };

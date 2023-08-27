@@ -3940,7 +3940,6 @@ source: `
 const toneMapFunctions = {
   [LinearToneMapping]: 'linear',
   [ReinhardToneMapping]: 'reinhard',
-  [Uncharted2ToneMapping]: 'uncharted2',
   [CineonToneMapping]: 'cineon',
   [ACESFilmicToneMapping]: 'acesFilmic'
 };
