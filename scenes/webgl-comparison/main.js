@@ -151,7 +151,6 @@ function initRenderer(renderer) {
   resize();
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.screenSpacePanning = true;
   controls.target.set(0, 20, 0);
 
   renderer.gammaOutput = true;

@@ -68,7 +68,6 @@ camera.fov = 35;
 camera.aperture = 0.01;
 
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.screenSpacePanning = true;
 
 const scene = new THREE.Scene();
 
