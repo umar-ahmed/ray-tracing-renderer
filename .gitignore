@@ -9,3 +9,5 @@ node_modules
 
 # artifacts from tests
 coverage/
+
+build/
