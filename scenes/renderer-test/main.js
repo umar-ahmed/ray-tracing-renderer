@@ -66,7 +66,8 @@ function makeMesh() {
 }
 
 function init() {
-  const envmap = new RGBELoader().load('envmap.hdr');
+  // hackily setting byte type
+  const envmap = new RGBELoader().setDataType(THREE.UnsignedByteType).load('envmap.hdr');
   const envLight = new EnvironmentLight(envmap);
   scene.add(envLight);
 
