@@ -203,7 +203,7 @@ function init() {
 
   let unreadyMat;
   {
-    // Create a test (non-buffer) Geometry
+    // Create a test (non-buffer) Geometry (Actually, since r125, this produces a BufferGeometry as well :P)
     const geo = new THREE.BoxGeometry(20, 6, 6);
     const mat = new THREE.MeshStandardMaterial();
     mat.roughness = 0.2;
