@@ -22,7 +22,7 @@ export function mergeMeshesToGeometry(meshes) {
       addFlatGeometryIndices(geometry);
     }
 
-    geometry.applyMatrix(mesh.matrixWorld);
+    geometry.applyMatrix4(mesh.matrixWorld);
 
     if (!geometry.getAttribute('normal')) {
       geometry.computeVertexNormals();
@@ -62,10 +62,10 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
   const indexAttrib = new BufferAttribute(new Uint32Array(indexCount), 1, false);
 
   const mergedGeometry = new BufferGeometry();
-  mergedGeometry.addAttribute('position', positionAttrib);
-  mergedGeometry.addAttribute('normal', normalAttrib);
-  mergedGeometry.addAttribute('uv', uvAttrib);
-  mergedGeometry.addAttribute('materialMeshIndex', materialMeshIndexAttrib);
+  mergedGeometry.setAttribute('position', positionAttrib);
+  mergedGeometry.setAttribute('normal', normalAttrib);
+  mergedGeometry.setAttribute('uv', uvAttrib);
+  mergedGeometry.setAttribute('materialMeshIndex', materialMeshIndexAttrib);
   mergedGeometry.setIndex(indexAttrib);
 
   let currentVertex = 0;
@@ -101,7 +101,7 @@ function cloneBufferGeometry(bufferGeometry, attributes) {
   for (const name of attributes) {
     const attrib = bufferGeometry.getAttribute(name);
     if (attrib) {
-      newGeometry.addAttribute(name, attrib.clone());
+      newGeometry.setAttribute(name, attrib.clone());
     }
   }
 

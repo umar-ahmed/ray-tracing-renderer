@@ -1624,7 +1624,7 @@
           addFlatGeometryIndices(_geometry);
         }
 
-        _geometry.applyMatrix(mesh.matrixWorld);
+        _geometry.applyMatrix4(mesh.matrixWorld);
 
         if (!_geometry.getAttribute('normal')) {
           _geometry.computeVertexNormals();
@@ -1667,10 +1667,10 @@
     var materialMeshIndexAttrib = new THREE$1.BufferAttribute(new Int32Array(2 * vertexCount), 2, false);
     var indexAttrib = new THREE$1.BufferAttribute(new Uint32Array(indexCount), 1, false);
     var mergedGeometry = new THREE$1.BufferGeometry();
-    mergedGeometry.addAttribute('position', positionAttrib);
-    mergedGeometry.addAttribute('normal', normalAttrib);
-    mergedGeometry.addAttribute('uv', uvAttrib);
-    mergedGeometry.addAttribute('materialMeshIndex', materialMeshIndexAttrib);
+    mergedGeometry.setAttribute('position', positionAttrib);
+    mergedGeometry.setAttribute('normal', normalAttrib);
+    mergedGeometry.setAttribute('uv', uvAttrib);
+    mergedGeometry.setAttribute('materialMeshIndex', materialMeshIndexAttrib);
     mergedGeometry.setIndex(indexAttrib);
     var currentVertex = 0;
     var currentIndex = 0;
@@ -1723,7 +1723,7 @@
         var attrib = bufferGeometry.getAttribute(name);
 
         if (attrib) {
-          newGeometry.addAttribute(name, attrib.clone());
+          newGeometry.setAttribute(name, attrib.clone());
         }
       }
     } catch (err) {
