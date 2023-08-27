@@ -1,4 +1,10 @@
-const renderer = new THREE.RayTracingRenderer();
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
+// import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js'
+import {RGBELoader} from 'three/addons/loaders/RGBELoader.js'
+import { RayTracingRenderer, RayTracingMaterial, EnvironmentLight, LensCamera } from 'ray-tracing-renderer'
+
+const renderer = new RayTracingRenderer();
 renderer.setPixelRatio(1.0);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.5;
@@ -15,11 +21,11 @@ stats.domElement.style.left = '0px';
 stats.domElement.style.top = '0px';
 document.body.appendChild(stats.domElement);
 
-const camera = new THREE.LensCamera();
+const camera = new LensCamera();
 camera.fov = 70;
 camera.aperture = 0.01;
 
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
 controls.screenSpacePanning = true;
 
 const scene = new THREE.Scene();
@@ -51,7 +57,7 @@ const tick = (time) => {
 const geo = new THREE.SphereBufferGeometry(1, 24, 24);
 
 function makeMesh() {
-  const mat = new THREE.RayTracingMaterial();
+  const mat = new RayTracingMaterial();
   const mesh = new THREE.Mesh(geo, mat);
 
   // test setting scale and position on mesh
@@ -61,8 +67,8 @@ function makeMesh() {
 }
 
 function init() {
-  const envmap = new THREE.RGBELoader().load('envmap.hdr');
-  const envLight = new THREE.EnvironmentLight(envmap);
+  const envmap = new RGBELoader().load('envmap.hdr');
+  const envLight = new EnvironmentLight(envmap);
   scene.add(envLight);
 
   const model = new THREE.Object3D();

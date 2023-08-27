@@ -5,16 +5,16 @@ import { EnvironmentLight } from './EnvironmentLight';
 import { RayTracingMaterial } from './RayTracingMaterial';
 import { RayTracingRenderer } from './RayTracingRenderer';
 
-if (window.THREE) {
-  /* global THREE */
-  THREE.LensCamera = LensCamera;
-  THREE.SoftDirectionalLight = SoftDirectionalLight;
-  THREE.EnvironmentLight = EnvironmentLight;
-  THREE.RayTracingMaterial = RayTracingMaterial;
-  THREE.RayTracingRenderer = RayTracingRenderer;
-  THREE.ThickMaterial = constants.ThickMaterial;
-  THREE.ThinMaterial = constants.ThinMaterial;
-}
+// if (window.THREE) {
+//   /* global THREE */
+//   THREE.LensCamera = LensCamera;
+//   THREE.SoftDirectionalLight = SoftDirectionalLight;
+//   THREE.EnvironmentLight = EnvironmentLight;
+//   THREE.RayTracingMaterial = RayTracingMaterial;
+//   THREE.RayTracingRenderer = RayTracingRenderer;
+//   THREE.ThickMaterial = constants.ThickMaterial;
+//   THREE.ThinMaterial = constants.ThinMaterial;
+// }
 
 export {
   constants,
