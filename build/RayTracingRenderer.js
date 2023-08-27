@@ -2201,7 +2201,7 @@ vec3 getMatNormal(int materialIndex, vec2 uv, vec3 normal, vec3 dp1, vec3 dp2, v
     return texelFetch(s, unpackTexel(i, columnsLog2), 0);
   }
 
-  ivec4 fetchData(isampler2D s, int i, int columnsLog2) {
+  ivec4 fetchData(highp isampler2D s, int i, int columnsLog2) {
     return texelFetch(s, unpackTexel(i, columnsLog2), 0);
   }
 
