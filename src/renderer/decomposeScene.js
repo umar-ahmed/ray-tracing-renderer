@@ -27,11 +27,11 @@ export function decomposeScene(scene) {
       if (environmentLights.length > 1) {
         console.warn(environmentLights, 'only one environment light can be used per scene');
       }
-      // Valid lights have HDR texture map in RGBEEncoding
+      // Valid lights have HDR texture map in LinearEncoding
       if (isHDRTexture(child)) {
         environmentLights.push(child);
       } else {
-        console.warn(child, 'environment light does not use color value or map with THREE.RGBEEncoding');
+        console.warn(child, 'environment light does not use color value or map with THREE.LinearEncoding');
       }
     }
   });
@@ -46,5 +46,5 @@ export function decomposeScene(scene) {
 function isHDRTexture(texture) {
   return texture.map
     && texture.map.image
-    && (texture.map.encoding === THREE.RGBEEncoding || texture.map.encoding === THREE.LinearEncoding);
+    && texture.map.encoding === THREE.LinearEncoding;
 }
