@@ -1,46 +1,21 @@
-import resolve from 'rollup-plugin-node-resolve';
-import babel from 'rollup-plugin-babel';
+import resolve from "rollup-plugin-node-resolve";
 
 function build() {
   return {
-    input: 'src/main.js',
+    input: "src/main.js",
     output: {
-      file: 'build/RayTracingRenderer.js',
-      format: 'es',
+      file: "build/RayTracingRenderer.js",
+      format: "es",
       globals: {
-        three: 'THREE'
+        three: "THREE",
       },
-      name: 'RayTracingRenderer'
+      name: "RayTracingRenderer",
     },
-    plugins: [
-      resolve()
-    ],
-    external: [
-      'three',
-    ]
+    plugins: [resolve()],
+    external: ["three"],
   };
 }
 
-function buildEs5() {
-  const b = build();
-  b.output.file = 'build/RayTracingRenderer.es5.js';
-  b.plugins.push(
-    babel({
-      exclude: 'node_modules/**',
-      extensions: ['.js', '.glsl', '.frag', '.vert']
-    })
-  );
-  return b;
-}
-
-const bundle = [
-  build()
-];
-
-if (!process.env.DEV) {
-  bundle.push(
-    buildEs5()
-  );
-}
+const bundle = [build()];
 
 export default bundle;

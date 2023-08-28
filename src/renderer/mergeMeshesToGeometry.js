@@ -104,7 +104,7 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
     // Start of BufferGeometry.merge()
 
     {
-      const offset = currentVertex;
+      let offset = currentVertex;
 
       if (!(geometry && geometry.isBufferGeometry)) {
         console.error(

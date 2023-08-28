@@ -4,12 +4,11 @@
   "description": "A [Three.js](https://github.com/mrdoob/three.js/) renderer which utilizes path tracing to render a scene with true photorealism. The renderer supports global illumination, reflections, soft shadows, and realistic environment lighting.",
   "main": "build/RayTracingRenderer.js",
   "scripts": {
-    "build": "./node_modules/.bin/rollup -c",
+    "build": "rollup -c",
     "dev": "./node_modules/.bin/rollup -cw --environment DEV & ./node_modules/.bin/http-server",
-    "test": "./node_modules/jest/bin/jest.js",
-    "lint": "./node_modules/.bin/eslint src/ test/",
-    "release": "./scripts/release.sh",
-    "format": "./node_modules/.bin/prettier --write src/ test/"
+    "test": "jest",
+    "lint": "eslint src/ test/",
+    "format": "prettier --write src/ test/"
   },
   "author": "HOVER Inc",
   "license": "MIT",
@@ -22,7 +21,6 @@
     "http-server": "^0.12.3",
     "jest": "^26.0.1",
     "prettier": "^3.0.2",
-    "release-it": "^14.0.2",
     "rollup": "^2.26.10",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-node-resolve": "^5.2.0",
