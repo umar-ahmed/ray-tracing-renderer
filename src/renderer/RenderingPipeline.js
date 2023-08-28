@@ -1,27 +1,26 @@
-import { decomposeScene } from './decomposeScene';
-import { makeFramebuffer } from './Framebuffer';
-import { makeFullscreenQuad } from './FullscreenQuad';
-import { makeGBufferPass } from './GBufferPass';
-import { makeMaterialBuffer } from './MaterialBuffer';
-import { mergeMeshesToGeometry } from './mergeMeshesToGeometry';
-import { makeRayTracePass } from './RayTracePass';
-import { makeRenderSize } from './RenderSize';
-import { makeReprojectPass } from './ReprojectPass';
-import { makeToneMapPass } from './ToneMapPass';
-import { clamp, numberArraysEqual } from './util';
-import { makeTileRender } from './TileRender';
-import { makeDepthTarget, makeTexture } from './Texture';
-import noiseBase64 from './texture/noise';
-import { PerspectiveCamera, Vector2 } from 'three';
+import { decomposeScene } from "./decomposeScene";
+import { makeFramebuffer } from "./Framebuffer";
+import { makeFullscreenQuad } from "./FullscreenQuad";
+import { makeGBufferPass } from "./GBufferPass";
+import { makeMaterialBuffer } from "./MaterialBuffer";
+import { mergeMeshesToGeometry } from "./mergeMeshesToGeometry";
+import { makeRayTracePass } from "./RayTracePass";
+import { makeRenderSize } from "./RenderSize";
+import { makeReprojectPass } from "./ReprojectPass";
+import { makeToneMapPass } from "./ToneMapPass";
+import { clamp, numberArraysEqual } from "./util";
+import { makeTileRender } from "./TileRender";
+import { makeDepthTarget, makeTexture } from "./Texture";
+import noiseBase64 from "./texture/noise";
+import { PerspectiveCamera, Vector2 } from "three";
 
 export function makeRenderingPipeline({
-    gl,
-    optionalExtensions,
-    scene,
-    toneMappingParams,
-    bounces, // number of global illumination bounces
-  }) {
-
+  gl,
+  optionalExtensions,
+  scene,
+  toneMappingParams,
+  bounces, // number of global illumination bounces
+}) {
   const maxReprojectedSamples = 20;
 
   // how many samples to render with uniform noise before switching to stratified noise
@@ -48,11 +47,25 @@ export function makeRenderingPipeline({
 
   const fullscreenQuad = makeFullscreenQuad(gl);
 
-  const rayTracePass = makeRayTracePass(gl, { bounces, decomposedScene, fullscreenQuad, materialBuffer, mergedMesh, optionalExtensions, scene });
+  const rayTracePass = makeRayTracePass(gl, {
+    bounces,
+    decomposedScene,
+    fullscreenQuad,
+    materialBuffer,
+    mergedMesh,
+    optionalExtensions,
+    scene,
+  });
 
-  const reprojectPass = makeReprojectPass(gl, { fullscreenQuad, maxReprojectedSamples });
+  const reprojectPass = makeReprojectPass(gl, {
+    fullscreenQuad,
+    maxReprojectedSamples,
+  });
 
-  const toneMapPass = makeToneMapPass(gl, { fullscreenQuad, toneMappingParams });
+  const toneMapPass = makeToneMapPass(gl, {
+    fullscreenQuad,
+    toneMappingParams,
+  });
 
   const gBufferPass = makeGBufferPass(gl, { materialBuffer, mergedMesh });
 
@@ -98,12 +111,30 @@ export function makeRenderingPipeline({
   let lastToneMappedTexture;
 
   function initFrameBuffers(width, height) {
-    const makeHdrBuffer = () => makeFramebuffer(gl, {
-      color: { 0: makeTexture(gl, { width, height, storage: 'float', magFilter: gl.LINEAR, minFilter: gl.LINEAR }) }
-    });
+    const makeHdrBuffer = () =>
+      makeFramebuffer(gl, {
+        color: {
+          0: makeTexture(gl, {
+            width,
+            height,
+            storage: "float",
+            magFilter: gl.LINEAR,
+            minFilter: gl.LINEAR,
+          }),
+        },
+      });
 
-    const makeReprojectBuffer = () => makeFramebuffer(gl, {
-        color: { 0: makeTexture(gl, { width, height, storage: 'float', magFilter: gl.LINEAR, minFilter: gl.LINEAR }) }
+    const makeReprojectBuffer = () =>
+      makeFramebuffer(gl, {
+        color: {
+          0: makeTexture(gl, {
+            width,
+            height,
+            storage: "float",
+            magFilter: gl.LINEAR,
+            minFilter: gl.LINEAR,
+          }),
+        },
       });
 
     hdrBuffer = makeHdrBuffer();
@@ -112,22 +143,45 @@ export function makeRenderingPipeline({
     reprojectBuffer = makeReprojectBuffer();
     reprojectBackBuffer = makeReprojectBuffer();
 
-    const normalBuffer = makeTexture(gl, { width, height, storage: 'halfFloat' });
-    const faceNormalBuffer = makeTexture(gl, { width, height, storage: 'halfFloat' });
-    const colorBuffer = makeTexture(gl, { width, height, storage: 'byte', channels: 3 });
-    const matProps = makeTexture(gl, { width, height, storage: 'byte', channels: 2 });
+    const normalBuffer = makeTexture(gl, {
+      width,
+      height,
+      storage: "halfFloat",
+    });
+    const faceNormalBuffer = makeTexture(gl, {
+      width,
+      height,
+      storage: "halfFloat",
+    });
+    const colorBuffer = makeTexture(gl, {
+      width,
+      height,
+      storage: "byte",
+      channels: 3,
+    });
+    const matProps = makeTexture(gl, {
+      width,
+      height,
+      storage: "byte",
+      channels: 2,
+    });
     const depthTarget = makeDepthTarget(gl, width, height);
 
-    const makeGBuffer = () => makeFramebuffer(gl, {
-      color: {
-        [gBufferPass.outputLocs.position]: makeTexture(gl, { width, height, storage: 'float' }),
-        [gBufferPass.outputLocs.normal]: normalBuffer,
-        [gBufferPass.outputLocs.faceNormal]: faceNormalBuffer,
-        [gBufferPass.outputLocs.color]: colorBuffer,
-        [gBufferPass.outputLocs.matProps]: matProps,
-      },
-      depth: depthTarget
-    });
+    const makeGBuffer = () =>
+      makeFramebuffer(gl, {
+        color: {
+          [gBufferPass.outputLocs.position]: makeTexture(gl, {
+            width,
+            height,
+            storage: "float",
+          }),
+          [gBufferPass.outputLocs.normal]: normalBuffer,
+          [gBufferPass.outputLocs.faceNormal]: faceNormalBuffer,
+          [gBufferPass.outputLocs.color]: colorBuffer,
+          [gBufferPass.outputLocs.matProps]: matProps,
+        },
+        depth: depthTarget,
+      });
 
     gBuffer = makeGBuffer();
     gBufferBack = makeGBuffer();
@@ -178,9 +232,11 @@ export function makeRenderingPipeline({
   }
 
   function areCamerasEqual(cam1, cam2) {
-    return numberArraysEqual(cam1.matrixWorld.elements, cam2.matrixWorld.elements) &&
+    return (
+      numberArraysEqual(cam1.matrixWorld.elements, cam2.matrixWorld.elements) &&
       cam1.aspect === cam2.aspect &&
-      cam1.fov === cam2.fov;
+      cam1.fov === cam2.fov
+    );
   }
 
   function updateSeed(width, height, useJitter = true) {
@@ -252,7 +308,7 @@ export function makeRenderingPipeline({
       normal: gBuffer.color[gBufferPass.outputLocs.normal],
       faceNormal: gBuffer.color[gBufferPass.outputLocs.faceNormal],
       color: gBuffer.color[gBufferPass.outputLocs.color],
-      matProps: gBuffer.color[gBufferPass.outputLocs.matProps]
+      matProps: gBuffer.color[gBufferPass.outputLocs.matProps],
     });
   }
 
@@ -305,11 +361,12 @@ export function makeRenderingPipeline({
   }
 
   function drawTile() {
-    const { x, y, tileWidth, tileHeight, isFirstTile, isLastTile } = tileRender.nextTile(elapsedFrameTime);
+    const { x, y, tileWidth, tileHeight, isFirstTile, isLastTile } =
+      tileRender.nextTile(elapsedFrameTime);
 
     if (isFirstTile) {
-
-      if (sampleCount === 0) { // previous rendered image was a preview image
+      if (sampleCount === 0) {
+        // previous rendered image was a preview image
         clearBuffer(hdrBuffer);
         reprojectPass.setPreviousCamera(lastCamera);
       } else {
@@ -429,6 +486,6 @@ export function makeRenderingPipeline({
     },
     get onSampleRendered() {
       return sampleRenderedCallback;
-    }
+    },
   };
 }

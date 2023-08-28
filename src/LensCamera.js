@@ -1,4 +1,4 @@
-import { PerspectiveCamera }  from 'three';
+import { PerspectiveCamera } from "three";
 
 export class LensCamera extends PerspectiveCamera {
   constructor(...args) {

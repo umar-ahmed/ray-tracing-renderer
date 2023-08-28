@@ -1,14 +1,10 @@
-import constants from './chunks/constants.glsl';
-import materialBuffer from './chunks/materialBuffer.glsl';
+import constants from "./chunks/constants.glsl";
+import materialBuffer from "./chunks/materialBuffer.glsl";
 
 export default {
-
-outputs: ['position', 'normal', 'faceNormal', 'color', 'matProps'],
-includes: [
-  constants,
-  materialBuffer,
-],
-source: `
+  outputs: ["position", "normal", "faceNormal", "color", "matProps"],
+  includes: [constants, materialBuffer],
+  source: `
   in vec3 vPosition;
   in vec3 vNormal;
   in vec2 vUv;
@@ -52,6 +48,5 @@ source: `
     out_color = vec4(color, 0);
     out_matProps = vec4(roughness, metalness, 0, 0);
   }
-`
-
-}
+`,
+};

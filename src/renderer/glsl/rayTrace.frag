@@ -1,36 +1,36 @@
-import { unrollLoop } from '../glslUtil';
-import constants from './chunks/constants.glsl';
-import rayTraceCore from './chunks/rayTraceCore.glsl';
-import textureLinear from './chunks/textureLinear.glsl';
-import materialBuffer from './chunks/materialBuffer.glsl';
-import intersect from './chunks/intersect.glsl';
-import surfaceInteractionDirect from './chunks/surfaceInteractionDirect.glsl';
-import random from './chunks/random.glsl';
-import envMap from './chunks/envMap.glsl';
-import bsdf from './chunks/bsdf.glsl';
-import sample from './chunks/sample.glsl';
-import sampleMaterial from './chunks/sampleMaterial.glsl';
-import sampleShadowCatcher from './chunks/sampleShadowCatcher.glsl';
-import sampleGlass from './chunks/sampleGlassSpecular.glsl';
+import { unrollLoop } from "../glslUtil";
+import constants from "./chunks/constants.glsl";
+import rayTraceCore from "./chunks/rayTraceCore.glsl";
+import textureLinear from "./chunks/textureLinear.glsl";
+import materialBuffer from "./chunks/materialBuffer.glsl";
+import intersect from "./chunks/intersect.glsl";
+import surfaceInteractionDirect from "./chunks/surfaceInteractionDirect.glsl";
+import random from "./chunks/random.glsl";
+import envMap from "./chunks/envMap.glsl";
+import bsdf from "./chunks/bsdf.glsl";
+import sample from "./chunks/sample.glsl";
+import sampleMaterial from "./chunks/sampleMaterial.glsl";
+import sampleShadowCatcher from "./chunks/sampleShadowCatcher.glsl";
+import sampleGlass from "./chunks/sampleGlassSpecular.glsl";
 
 export default {
-includes: [
-  constants,
-  rayTraceCore,
-  textureLinear,
-  materialBuffer,
-  intersect,
-  surfaceInteractionDirect,
-  random,
-  envMap,
-  bsdf,
-  sample,
-  sampleMaterial,
-  sampleGlass,
-  sampleShadowCatcher,
-],
-outputs: ['light'],
-source: (defines) => `
+  includes: [
+    constants,
+    rayTraceCore,
+    textureLinear,
+    materialBuffer,
+    intersect,
+    surfaceInteractionDirect,
+    random,
+    envMap,
+    bsdf,
+    sample,
+    sampleMaterial,
+    sampleGlass,
+    sampleShadowCatcher,
+  ],
+  outputs: ["light"],
+  source: (defines) => `
   void bounce(inout Path path, int i, inout SurfaceInteraction si) {
 
     if (!si.hit) {
@@ -95,13 +95,19 @@ source: (defines) => `
     // Some hardware fails to iterate over a GLSL loop, so we provide this workaround
     // for (int i = 1; i < defines.bounces + 1, i += 1)
     // equivelant to
-    ${unrollLoop('i', 2, defines.BOUNCES + 1, 1, `
+    ${unrollLoop(
+      "i",
+      2,
+      defines.BOUNCES + 1,
+      1,
+      `
       if (path.abort) {
         return vec4(path.li, path.alpha);
       }
       intersectScene(path.ray, si);
       bounce(path, i, si);
-    `)}
+    `,
+    )}
 
     return vec4(path.li, path.alpha);
   }
@@ -157,5 +163,5 @@ source: (defines) => `
     //   out_light = vec4(1, 0, 0, 1);
     // }
 }
-`
-}
+`,
+};

@@ -1,9 +1,9 @@
-import textureLinear from './chunks/textureLinear.glsl';
+import textureLinear from "./chunks/textureLinear.glsl";
 
 export default {
-includes: [textureLinear],
-outputs: ['color'],
-source: `
+  includes: [textureLinear],
+  outputs: ["color"],
+  source: `
   in vec2 vCoord;
 
   uniform sampler2D lightTex;
@@ -108,5 +108,5 @@ source: `
 
     out_color = vec4(light, 1.0);
   }
-`
-}
+`,
+};

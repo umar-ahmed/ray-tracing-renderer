@@ -1,18 +1,18 @@
-import { makeRenderPass } from './RenderPass';
-import vertex from './glsl/gBuffer.vert';
-import fragment from './glsl/gBuffer.frag';
-import { Matrix4 } from 'three';
+import { makeRenderPass } from "./RenderPass";
+import vertex from "./glsl/gBuffer.vert";
+import fragment from "./glsl/gBuffer.frag";
+import { Matrix4 } from "three";
 
 export function makeGBufferPass(gl, { materialBuffer, mergedMesh }) {
   const renderPass = makeRenderPass(gl, {
     defines: materialBuffer.defines,
     vertex,
-    fragment
+    fragment,
   });
 
-  renderPass.setTexture('diffuseMap', materialBuffer.textures.diffuseMap);
-  renderPass.setTexture('normalMap', materialBuffer.textures.normalMap);
-  renderPass.setTexture('pbrMap', materialBuffer.textures.pbrMap);
+  renderPass.setTexture("diffuseMap", materialBuffer.textures.diffuseMap);
+  renderPass.setTexture("normalMap", materialBuffer.textures.normalMap);
+  renderPass.setTexture("pbrMap", materialBuffer.textures.pbrMap);
 
   const geometry = mergedMesh.geometry;
 
@@ -43,7 +43,7 @@ export function makeGBufferPass(gl, { materialBuffer, mergedMesh }) {
     projView.elements[9] += 2 * jitterY;
 
     projView.multiply(currentCamera.matrixWorldInverse);
-    renderPass.setUniform('projView', projView.elements);
+    renderPass.setUniform("projView", projView.elements);
   }
 
   let projView = new Matrix4();
@@ -61,18 +61,34 @@ export function makeGBufferPass(gl, { materialBuffer, mergedMesh }) {
     draw,
     outputLocs: renderPass.outputLocs,
     setCamera,
-    setJitter
+    setJitter,
   };
 }
 
 function uploadAttributes(gl, renderPass, geometry) {
-  setAttribute(gl, renderPass.attribLocs.aPosition, geometry.getAttribute('position'));
-  setAttribute(gl, renderPass.attribLocs.aNormal, geometry.getAttribute('normal'));
-  setAttribute(gl, renderPass.attribLocs.aUv, geometry.getAttribute('uv'));
-  setAttribute(gl, renderPass.attribLocs.aMaterialMeshIndex, geometry.getAttribute('materialMeshIndex'));
+  setAttribute(
+    gl,
+    renderPass.attribLocs.aPosition,
+    geometry.getAttribute("position"),
+  );
+  setAttribute(
+    gl,
+    renderPass.attribLocs.aNormal,
+    geometry.getAttribute("normal"),
+  );
+  setAttribute(gl, renderPass.attribLocs.aUv, geometry.getAttribute("uv"));
+  setAttribute(
+    gl,
+    renderPass.attribLocs.aMaterialMeshIndex,
+    geometry.getAttribute("materialMeshIndex"),
+  );
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gl.createBuffer());
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, geometry.getIndex().array, gl.STATIC_DRAW);
+  gl.bufferData(
+    gl.ELEMENT_ARRAY_BUFFER,
+    geometry.getIndex().array,
+    gl.STATIC_DRAW,
+  );
 }
 
 function setAttribute(gl, location, bufferAttribute) {
@@ -91,6 +107,6 @@ function setAttribute(gl, location, bufferAttribute) {
   } else if (array instanceof Int32Array) {
     gl.vertexAttribIPointer(location, itemSize, gl.INT, 0, 0);
   } else {
-    throw 'Unsupported buffer type';
+    throw "Unsupported buffer type";
   }
 }

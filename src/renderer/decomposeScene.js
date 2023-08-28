@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
 export function decomposeScene(scene) {
   const meshes = [];
@@ -6,32 +6,37 @@ export function decomposeScene(scene) {
   const ambientLights = [];
   const environmentLights = [];
 
-  scene.traverse(child => {
+  scene.traverse((child) => {
     if (child.isMesh) {
       if (!child.geometry) {
-        console.warn(child, 'must have a geometry property');
-      }
-      else if (!(child.material.isMeshStandardMaterial)) {
-        console.warn(child, 'must use MeshStandardMaterial in order to be rendered.');
+        console.warn(child, "must have a geometry property");
+      } else if (!child.material.isMeshStandardMaterial) {
+        console.warn(
+          child,
+          "must use MeshStandardMaterial in order to be rendered.",
+        );
       } else {
         meshes.push(child);
       }
-    }
-    else if (child.isDirectionalLight) {
+    } else if (child.isDirectionalLight) {
       directionalLights.push(child);
-    }
-    else if (child.isAmbientLight) {
+    } else if (child.isAmbientLight) {
       ambientLights.push(child);
-    }
-    else if (child.isEnvironmentLight) {
+    } else if (child.isEnvironmentLight) {
       if (environmentLights.length > 1) {
-        console.warn(environmentLights, 'only one environment light can be used per scene');
+        console.warn(
+          environmentLights,
+          "only one environment light can be used per scene",
+        );
       }
       // Valid lights have HDR texture map in LinearSRGBColorSpace
       if (isHDRTexture(child)) {
         environmentLights.push(child);
       } else {
-        console.warn(child, 'environment light does not use color value or map with THREE.LinearSRGBColorSpace');
+        console.warn(
+          child,
+          "environment light does not use color value or map with THREE.LinearSRGBColorSpace",
+        );
       }
     }
   });
@@ -39,12 +44,18 @@ export function decomposeScene(scene) {
   const background = scene.background;
 
   return {
-    background, meshes, directionalLights, ambientLights, environmentLights
+    background,
+    meshes,
+    directionalLights,
+    ambientLights,
+    environmentLights,
   };
 }
 
 function isHDRTexture(texture) {
-  return texture.map
-    && texture.map.image
-    && texture.map.colorSpace === THREE.LinearSRGBColorSpace;
+  return (
+    texture.map &&
+    texture.map.image &&
+    texture.map.colorSpace === THREE.LinearSRGBColorSpace
+  );
 }

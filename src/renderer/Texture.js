@@ -1,4 +1,4 @@
-import { clamp } from './util';
+import { clamp } from "./util";
 
 export function makeTexture(gl, params) {
   let {
@@ -64,7 +64,13 @@ export function makeTexture(gl, params) {
 
   channels = clamp(channels, 1, 4);
 
-  const { type, format, internalFormat } = getTextureFormat(gl, channels, storage, data, gammaCorrection);
+  const { type, format, internalFormat } = getTextureFormat(
+    gl,
+    channels,
+    storage,
+    data,
+    gammaCorrection,
+  );
 
   if (dataArray) {
     gl.texStorage3D(target, 1, internalFormat, width, height, dataArray.length);
@@ -74,9 +80,24 @@ export function makeTexture(gl, params) {
       const layerWidth = dataArray[i].width || width;
       const layerHeight = dataArray[i].height || height;
 
-      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, Array.isArray(flipY) ? flipY[i] : flipY);
+      gl.pixelStorei(
+        gl.UNPACK_FLIP_Y_WEBGL,
+        Array.isArray(flipY) ? flipY[i] : flipY,
+      );
 
-      gl.texSubImage3D(target, 0, 0, 0, i, layerWidth, layerHeight, 1, format, type, dataArray[i]);
+      gl.texSubImage3D(
+        target,
+        0,
+        0,
+        0,
+        i,
+        layerWidth,
+        layerHeight,
+        1,
+        format,
+        type,
+        dataArray[i],
+      );
     }
   } else if (length > 1) {
     // create empty array texture
@@ -94,7 +115,7 @@ export function makeTexture(gl, params) {
 
   return {
     target,
-    texture
+    texture,
   };
 }
 
@@ -108,7 +129,7 @@ export function makeDepthTarget(gl, width, height) {
 
   return {
     target,
-    texture
+    texture,
   };
 }
 
@@ -117,7 +138,7 @@ function getFormat(gl, channels) {
     1: gl.RED,
     2: gl.RG,
     3: gl.RGB,
-    4: gl.RGBA
+    4: gl.RGBA,
   };
   return map[channels];
 }
@@ -134,34 +155,34 @@ function getTextureFormat(gl, channels, storage, data, gammaCorrection) {
 
   const isFloatArray = data instanceof Float32Array;
 
-  if (storage === 'byte' || (!storage && isByteArray)) {
+  if (storage === "byte" || (!storage && isByteArray)) {
     internalFormat = {
       1: gl.R8,
       2: gl.RG8,
       3: gammaCorrection ? gl.SRGB8 : gl.RGB8,
-      4: gammaCorrection ? gl.SRGB8_ALPHA8 : gl.RGBA8
+      4: gammaCorrection ? gl.SRGB8_ALPHA8 : gl.RGBA8,
     }[channels];
 
     type = gl.UNSIGNED_BYTE;
-  } else if (storage === 'float' || (!storage && isFloatArray)) {
+  } else if (storage === "float" || (!storage && isFloatArray)) {
     internalFormat = {
       1: gl.R32F,
       2: gl.RG32F,
       3: gl.RGB32F,
-      4: gl.RGBA32F
+      4: gl.RGBA32F,
     }[channels];
 
     type = gl.FLOAT;
-  } else if (storage === 'halfFloat') {
+  } else if (storage === "halfFloat") {
     internalFormat = {
       1: gl.R16F,
       2: gl.RG16F,
       3: gl.RGB16F,
-      4: gl.RGBA16F
+      4: gl.RGBA16F,
     }[channels];
 
     type = gl.FLOAT;
-  } else if (storage === 'snorm') {
+  } else if (storage === "snorm") {
     internalFormat = {
       1: gl.R8_SNORM,
       2: gl.RG8_SNORM,
@@ -177,6 +198,6 @@ function getTextureFormat(gl, channels, storage, data, gammaCorrection) {
   return {
     format,
     internalFormat,
-    type
+    type,
   };
 }

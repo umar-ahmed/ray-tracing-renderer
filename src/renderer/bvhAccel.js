@@ -2,8 +2,8 @@
 // Uses the surface area heuristic (SAH) algorithm for efficient partitioning
 // http://www.pbr-book.org/3ed-2018/Primitives_and_Intersection_Acceleration/Bounding_Volume_Hierarchies.html
 
-import { Box3, Vector3 }  from 'three';
-import { partition, nthElement } from './bvhUtil';
+import { Box3, Vector3 } from "three";
+import { partition, nthElement } from "./bvhUtil";
 
 const size = new Vector3();
 
@@ -21,20 +21,25 @@ export function flattenBvh(bvh) {
   const splitAxisMap = {
     x: 0,
     y: 1,
-    z: 2
+    z: 2,
   };
 
   let maxDepth = 1;
   const traverse = (node, depth = 1) => {
-
     maxDepth = Math.max(depth, maxDepth);
 
     if (node.primitives) {
       for (let i = 0; i < node.primitives.length; i++) {
         const p = node.primitives[i];
         flat.push(
-          p.indices[0], p.indices[1], p.indices[2], node.primitives.length,
-          p.faceNormal.x, p.faceNormal.y, p.faceNormal.z, p.materialIndex
+          p.indices[0],
+          p.indices[1],
+          p.indices[2],
+          node.primitives.length,
+          p.faceNormal.x,
+          p.faceNormal.y,
+          p.faceNormal.z,
+          p.materialIndex,
         );
         isBounds.push(false);
       }
@@ -42,8 +47,14 @@ export function flattenBvh(bvh) {
       const bounds = node.bounds;
 
       flat.push(
-        bounds.min.x, bounds.min.y, bounds.min.z, splitAxisMap[node.splitAxis],
-        bounds.max.x, bounds.max.y, bounds.max.z, null // pointer to second shild
+        bounds.min.x,
+        bounds.min.y,
+        bounds.min.z,
+        splitAxisMap[node.splitAxis],
+        bounds.max.x,
+        bounds.max.y,
+        bounds.max.z,
+        null, // pointer to second shild
       );
 
       const i = flat.length - 1;
@@ -85,15 +96,15 @@ export function flattenBvh(bvh) {
   return {
     maxDepth,
     count: flat.length / 4,
-    buffer: floatView
+    buffer: floatView,
   };
 }
 
 function makePrimitiveInfo(geometry) {
   const primitiveInfo = [];
   const indices = geometry.getIndex().array;
-  const position = geometry.getAttribute('position');
-  const materialMeshIndex = geometry.getAttribute('materialMeshIndex');
+  const position = geometry.getAttribute("position");
+  const materialMeshIndex = geometry.getAttribute("materialMeshIndex");
 
   const v0 = new Vector3();
   const v1 = new Vector3();
@@ -123,7 +134,7 @@ function makePrimitiveInfo(geometry) {
       center: bounds.getCenter(new Vector3()),
       indices: [i0, i1, i2],
       faceNormal: new Vector3().crossVectors(e1, e0).normalize(),
-      materialIndex: materialMeshIndex.getX(i0)
+      materialIndex: materialMeshIndex.getX(i0),
     };
 
     primitiveInfo.push(info);
@@ -149,7 +160,6 @@ function recursiveBuild(primitiveInfo, start, end) {
     }
     const dim = maximumExtent(centroidBounds);
 
-
     let mid = Math.floor((start + end) / 2);
 
     // middle split method
@@ -163,12 +173,17 @@ function recursiveBuild(primitiveInfo, start, end) {
 
     // surface area heuristic method
     if (nPrimitives <= 4) {
-      nthElement(primitiveInfo, (a, b) => a.center[dim] < b.center[dim], start, end, mid);
+      nthElement(
+        primitiveInfo,
+        (a, b) => a.center[dim] < b.center[dim],
+        start,
+        end,
+        mid,
+      );
     } else if (centroidBounds.max[dim] === centroidBounds.min[dim]) {
       // can't split primitives based on centroid bounds. terminate.
       return makeLeafNode(primitiveInfo.slice(start, end), bounds);
     } else {
-
       const buckets = [];
       for (let i = 0; i < 12; i++) {
         buckets.push({
@@ -178,7 +193,10 @@ function recursiveBuild(primitiveInfo, start, end) {
       }
 
       for (let i = start; i < end; i++) {
-        let b = Math.floor(buckets.length * boxOffset(centroidBounds, dim, primitiveInfo[i].center));
+        let b = Math.floor(
+          buckets.length *
+            boxOffset(centroidBounds, dim, primitiveInfo[i].center),
+        );
         if (b === buckets.length) {
           b = buckets.length - 1;
         }
@@ -201,7 +219,11 @@ function recursiveBuild(primitiveInfo, start, end) {
           b1.union(buckets[j].bounds);
           count1 += buckets[j].count;
         }
-        cost.push(0.1 + (count0 * surfaceArea(b0) + count1 * surfaceArea(b1)) / surfaceArea(bounds));
+        cost.push(
+          0.1 +
+            (count0 * surfaceArea(b0) + count1 * surfaceArea(b1)) /
+              surfaceArea(bounds),
+        );
       }
 
       let minCost = cost[0];
@@ -213,13 +235,20 @@ function recursiveBuild(primitiveInfo, start, end) {
         }
       }
 
-      mid = partition(primitiveInfo, p => {
-        let b = Math.floor(buckets.length * boxOffset(centroidBounds, dim, p.center));
-        if (b === buckets.length) {
-          b = buckets.length - 1;
-        }
-        return b <= minCostSplitBucket;
-      }, start, end);
+      mid = partition(
+        primitiveInfo,
+        (p) => {
+          let b = Math.floor(
+            buckets.length * boxOffset(centroidBounds, dim, p.center),
+          );
+          if (b === buckets.length) {
+            b = buckets.length - 1;
+          }
+          return b <= minCostSplitBucket;
+        },
+        start,
+        end,
+      );
     }
 
     return makeInteriorNode(
@@ -233,7 +262,7 @@ function recursiveBuild(primitiveInfo, start, end) {
 function makeLeafNode(primitives, bounds) {
   return {
     primitives,
-    bounds
+    bounds,
   };
 }
 
@@ -249,16 +278,16 @@ function makeInteriorNode(splitAxis, child0, child1) {
 function maximumExtent(box3) {
   box3.getSize(size);
   if (size.x > size.z) {
-    return size.x > size.y ? 'x' : 'y';
+    return size.x > size.y ? "x" : "y";
   } else {
-    return size.z > size.y ? 'z' : 'y';
+    return size.z > size.y ? "z" : "y";
   }
 }
 
 function boxOffset(box3, dim, v) {
   let offset = v[dim] - box3.min[dim];
 
-  if (box3.max[dim] > box3.min[dim]){
+  if (box3.max[dim] > box3.min[dim]) {
     offset /= box3.max[dim] - box3.min[dim];
   }
 

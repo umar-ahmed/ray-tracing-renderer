@@ -1,4 +1,4 @@
-import { DirectionalLight }  from 'three';
+import { DirectionalLight } from "three";
 
 export class SoftDirectionalLight extends DirectionalLight {
   constructor(color, intensity, softness = 0) {

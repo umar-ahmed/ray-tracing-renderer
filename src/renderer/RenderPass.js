@@ -1,21 +1,20 @@
-import { compileShader, createProgram, getAttributes } from './glUtil';
-import { makeUniformSetter } from './UniformSetter';
+import { compileShader, createProgram, getAttributes } from "./glUtil";
+import { makeUniformSetter } from "./UniformSetter";
 
 export function makeRenderPass(gl, params) {
-  const {
-    fragment,
-    vertex,
-  } = params;
+  const { fragment, vertex } = params;
 
-  const vertexCompiled = vertex instanceof WebGLShader ? vertex : makeVertexShader(gl, params);
+  const vertexCompiled =
+    vertex instanceof WebGLShader ? vertex : makeVertexShader(gl, params);
 
-  const fragmentCompiled = fragment instanceof WebGLShader ? fragment : makeFragmentShader(gl, params);
+  const fragmentCompiled =
+    fragment instanceof WebGLShader ? fragment : makeFragmentShader(gl, params);
 
   const program = createProgram(gl, vertexCompiled, fragmentCompiled);
 
   return {
     ...makeRenderPassFromProgram(gl, program),
-    outputLocs: fragment.outputs ? getOutputLocations(fragment.outputs) : {}
+    outputLocs: fragment.outputs ? getOutputLocations(fragment.outputs) : {},
   };
 }
 
@@ -28,7 +27,6 @@ export function makeFragmentShader(gl, { defines, fragment }) {
 }
 
 function makeRenderPassFromProgram(gl, program) {
-
   const uniformSetter = makeUniformSetter(gl, program);
 
   const textures = {};
@@ -47,7 +45,7 @@ function makeRenderPassFromProgram(gl, program) {
 
       textures[name] = {
         unit,
-        tex: texture
+        tex: texture,
       };
     } else {
       textures[name].tex = texture;
@@ -82,7 +80,8 @@ function makeRenderPassFromProgram(gl, program) {
 }
 
 function makeShaderStage(gl, type, shader, defines) {
-  let str = '#version 300 es\nprecision mediump float;\nprecision mediump int;\n';
+  let str =
+    "#version 300 es\nprecision mediump float;\nprecision mediump int;\n";
 
   if (defines) {
     str += addDefines(defines);
@@ -96,7 +95,7 @@ function makeShaderStage(gl, type, shader, defines) {
     str += addIncludes(shader.includes, defines);
   }
 
-  if (typeof shader.source === 'function') {
+  if (typeof shader.source === "function") {
     str += shader.source(defines);
   } else {
     str += shader.source;
@@ -106,7 +105,7 @@ function makeShaderStage(gl, type, shader, defines) {
 }
 
 function addDefines(defines) {
-  let str = '';
+  let str = "";
 
   for (const name in defines) {
     const value = defines[name];
@@ -122,7 +121,7 @@ function addDefines(defines) {
 }
 
 function addOutputs(outputs) {
-  let str = '';
+  let str = "";
 
   const locations = getOutputLocations(outputs);
 
@@ -135,10 +134,10 @@ function addOutputs(outputs) {
 }
 
 function addIncludes(includes, defines) {
-  let str = '';
+  let str = "";
 
   for (let include of includes) {
-    if (typeof include === 'function') {
+    if (typeof include === "function") {
       str += include(defines);
     } else {
       str += include;

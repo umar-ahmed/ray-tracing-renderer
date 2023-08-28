@@ -16,19 +16,32 @@ export function compileShader(gl, type, source) {
     return shader;
   }
 
-  const output = source.split('\n').map((x, i) => `${i + 1}: ${x}`).join('\n');
+  const output = source
+    .split("\n")
+    .map((x, i) => `${i + 1}: ${x}`)
+    .join("\n");
   console.log(output);
 
   throw gl.getShaderInfoLog(shader);
 }
 
-export function createProgram(gl, vertexShader, fragmentShader, transformVaryings, transformBufferMode) {
+export function createProgram(
+  gl,
+  vertexShader,
+  fragmentShader,
+  transformVaryings,
+  transformBufferMode,
+) {
   const program = gl.createProgram();
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
 
   if (transformVaryings) {
-    gl.transformFeedbackVaryings(program, transformVaryings, transformBufferMode);
+    gl.transformFeedbackVaryings(
+      program,
+      transformVaryings,
+      transformBufferMode,
+    );
   }
 
   gl.linkProgram(program);
@@ -54,7 +67,8 @@ export function getUniforms(gl, program) {
     const location = gl.getUniformLocation(program, name);
     if (location) {
       uniforms[name] = {
-        type, location
+        type,
+        location,
       };
     }
   }

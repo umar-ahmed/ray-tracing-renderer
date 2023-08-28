@@ -6,13 +6,13 @@ export function envMapDistribution(image) {
 
   const cdfImage = {
     width: image.width + 2,
-    height: image.height + 1
+    height: image.height + 1,
   };
 
   const cdf = makeTextureArray(cdfImage.width, cdfImage.height, 2);
 
   for (let y = 0; y < image.height; y++) {
-    const sinTheta = Math.sin(Math.PI * (y + 0.5) / image.height);
+    const sinTheta = Math.sin((Math.PI * (y + 0.5)) / image.height);
     for (let x = 0; x < image.width; x++) {
       const i = 3 * (y * image.width + x);
       let r = data[i];
@@ -46,7 +46,6 @@ export function envMapDistribution(image) {
   return cdfImage;
 }
 
-
 function makeTextureArray(width, height, channels) {
   const array = new Float32Array(channels * width * height);
 
@@ -60,6 +59,6 @@ function makeTextureArray(width, height, channels) {
     width,
     height,
     channels,
-    array
+    array,
   };
 }

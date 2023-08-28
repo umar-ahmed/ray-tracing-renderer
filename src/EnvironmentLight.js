@@ -1,4 +1,4 @@
-import { Light }  from 'three';
+import { Light } from "three";
 
 export class EnvironmentLight extends Light {
   constructor(map, ...args) {

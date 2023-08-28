@@ -1,4 +1,4 @@
-import { MeshStandardMaterial }  from 'three';
+import { MeshStandardMaterial } from "three";
 
 export class RayTracingMaterial extends MeshStandardMaterial {
   constructor(...args) {

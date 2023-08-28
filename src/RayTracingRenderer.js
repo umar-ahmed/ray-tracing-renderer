@@ -1,26 +1,26 @@
-import { loadExtensions } from './renderer/glUtil';
-import { makeRenderingPipeline } from './renderer/RenderingPipeline';
-import * as THREE from 'three';
+import { loadExtensions } from "./renderer/glUtil";
+import { makeRenderingPipeline } from "./renderer/RenderingPipeline";
+import * as THREE from "three";
 
 const glRequiredExtensions = [
-  'EXT_color_buffer_float', // enables rendering to float buffers
-  'EXT_float_blend',
+  "EXT_color_buffer_float", // enables rendering to float buffers
+  "EXT_float_blend",
 ];
 
 const glOptionalExtensions = [
-  'OES_texture_float_linear', // enables gl.LINEAR texture filtering for float textures,
+  "OES_texture_float_linear", // enables gl.LINEAR texture filtering for float textures,
 ];
 
 export function RayTracingRenderer(params = {}) {
-  const canvas = params.canvas || document.createElement('canvas');
+  const canvas = params.canvas || document.createElement("canvas");
 
-  const gl = canvas.getContext('webgl2', {
+  const gl = canvas.getContext("webgl2", {
     alpha: false,
     depth: true,
     stencil: false,
     antialias: false,
-    powerPreference: 'high-performance',
-    failIfMajorPerformanceCaveat: true
+    powerPreference: "high-performance",
+    failIfMajorPerformanceCaveat: true,
   });
 
   loadExtensions(gl, glRequiredExtensions);
@@ -48,12 +48,18 @@ export function RayTracingRenderer(params = {}) {
     const toneMappingParams = {
       exposure: module.toneMappingExposure,
       whitePoint: module.toneMappingWhitePoint,
-      toneMapping: module.toneMapping
+      toneMapping: module.toneMapping,
     };
 
     const bounces = module.bounces;
 
-    pipeline = makeRenderingPipeline({gl, optionalExtensions, scene, toneMappingParams, bounces});
+    pipeline = makeRenderingPipeline({
+      gl,
+      optionalExtensions,
+      scene,
+      toneMappingParams,
+      bounces,
+    });
 
     pipeline.onSampleRendered = (...args) => {
       if (module.onSampleRendered) {
@@ -71,8 +77,8 @@ export function RayTracingRenderer(params = {}) {
     canvas.height = size.height * pixelRatio;
 
     if (updateStyle) {
-      canvas.style.width = `${ size.width }px`;
-      canvas.style.height = `${ size.height }px`;
+      canvas.style.width = `${size.width}px`;
+      canvas.style.height = `${size.height}px`;
     }
 
     if (pipeline) {
@@ -138,7 +144,9 @@ export function RayTracingRenderer(params = {}) {
 
     if (isNaN(currentTime)) {
       if (!syncWarning) {
-        console.warn('Ray Tracing Renderer warning: For improved performance, please call renderer.sync(time) before render.render(scene, camera), with the time parameter equalling the parameter passed to the callback of requestAnimationFrame');
+        console.warn(
+          "Ray Tracing Renderer warning: For improved performance, please call renderer.sync(time) before render.render(scene, camera), with the time parameter equalling the parameter passed to the callback of requestAnimationFrame",
+        );
         syncWarning = true;
       }
 
@@ -152,7 +160,7 @@ export function RayTracingRenderer(params = {}) {
 
     camera.updateMatrixWorld();
 
-    if(module.maxHardwareUsage) {
+    if (module.maxHardwareUsage) {
       // render new sample for the entire screen
       pipeline.drawFull(camera);
     } else {
@@ -165,10 +173,10 @@ export function RayTracingRenderer(params = {}) {
   // This means that when the user is on a different browser tab, module.render won't be called.
   // Since the timer should not measure time when module.render is inactive,
   // the timer should be reset when the user switches browser tabs
-  document.addEventListener('visibilitychange', restartTimer);
+  document.addEventListener("visibilitychange", restartTimer);
 
   module.dispose = () => {
-    document.removeEventListener('visibilitychange', restartTimer);
+    document.removeEventListener("visibilitychange", restartTimer);
     pipeline = null;
   };
 
@@ -176,10 +184,9 @@ export function RayTracingRenderer(params = {}) {
 }
 
 RayTracingRenderer.isSupported = () => {
-  const gl = document.createElement('canvas')
-    .getContext('webgl2', {
-      failIfMajorPerformanceCaveat: true
-    });
+  const gl = document.createElement("canvas").getContext("webgl2", {
+    failIfMajorPerformanceCaveat: true,
+  });
 
   if (!gl) {
     return false;

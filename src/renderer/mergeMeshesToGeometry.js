@@ -1,7 +1,6 @@
-import { BufferGeometry, BufferAttribute } from 'three';
+import { BufferGeometry, BufferAttribute } from "three";
 
 export function mergeMeshesToGeometry(meshes) {
-
   let vertexCount = 0;
   let indexCount = 0;
 
@@ -13,9 +12,9 @@ export function mergeMeshesToGeometry(meshes) {
       continue;
     }
 
-    const geometry = mesh.geometry.isBufferGeometry ?
-      cloneBufferGeometry(mesh.geometry, ['position', 'normal', 'uv']) : // BufferGeometry object
-      new BufferGeometry().fromGeometry(mesh.geometry); // Geometry object
+    const geometry = mesh.geometry.isBufferGeometry
+      ? cloneBufferGeometry(mesh.geometry, ["position", "normal", "uv"]) // BufferGeometry object
+      : new BufferGeometry().fromGeometry(mesh.geometry); // Geometry object
 
     const index = geometry.getIndex();
     if (!index) {
@@ -24,13 +23,13 @@ export function mergeMeshesToGeometry(meshes) {
 
     geometry.applyMatrix4(mesh.matrixWorld);
 
-    if (!geometry.getAttribute('normal')) {
+    if (!geometry.getAttribute("normal")) {
       geometry.computeVertexNormals();
     } else {
       geometry.normalizeNormals();
     }
 
-    vertexCount += geometry.getAttribute('position').count;
+    vertexCount += geometry.getAttribute("position").count;
     indexCount += geometry.getIndex().count;
 
     const material = mesh.material;
@@ -42,30 +41,54 @@ export function mergeMeshesToGeometry(meshes) {
 
     geometryAndMaterialIndex.push({
       geometry,
-      materialIndex
+      materialIndex,
     });
   }
 
-  const geometry = mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount);
+  const geometry = mergeGeometry(
+    geometryAndMaterialIndex,
+    vertexCount,
+    indexCount,
+  );
 
   return {
     geometry,
-    materials: Array.from(materialIndexMap.keys())
+    materials: Array.from(materialIndexMap.keys()),
   };
 }
 
 function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
-  const positionAttrib = new BufferAttribute(new Float32Array(3 * vertexCount), 3, false);
-  const normalAttrib = new BufferAttribute(new Float32Array(3 * vertexCount), 3, false);
-  const uvAttrib = new BufferAttribute(new Float32Array(2 * vertexCount), 2, false);
-  const materialMeshIndexAttrib = new BufferAttribute(new Int32Array(2 * vertexCount), 2, false);
-  const indexAttrib = new BufferAttribute(new Uint32Array(indexCount), 1, false);
+  const positionAttrib = new BufferAttribute(
+    new Float32Array(3 * vertexCount),
+    3,
+    false,
+  );
+  const normalAttrib = new BufferAttribute(
+    new Float32Array(3 * vertexCount),
+    3,
+    false,
+  );
+  const uvAttrib = new BufferAttribute(
+    new Float32Array(2 * vertexCount),
+    2,
+    false,
+  );
+  const materialMeshIndexAttrib = new BufferAttribute(
+    new Int32Array(2 * vertexCount),
+    2,
+    false,
+  );
+  const indexAttrib = new BufferAttribute(
+    new Uint32Array(indexCount),
+    1,
+    false,
+  );
 
   const mergedGeometry = new BufferGeometry();
-  mergedGeometry.setAttribute('position', positionAttrib);
-  mergedGeometry.setAttribute('normal', normalAttrib);
-  mergedGeometry.setAttribute('uv', uvAttrib);
-  mergedGeometry.setAttribute('materialMeshIndex', materialMeshIndexAttrib);
+  mergedGeometry.setAttribute("position", positionAttrib);
+  mergedGeometry.setAttribute("normal", normalAttrib);
+  mergedGeometry.setAttribute("uv", uvAttrib);
+  mergedGeometry.setAttribute("materialMeshIndex", materialMeshIndexAttrib);
   mergedGeometry.setIndex(indexAttrib);
 
   let currentVertex = 0;
@@ -73,7 +96,7 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
   let currentMesh = 1;
 
   for (const { geometry, materialIndex } of geometryAndMaterialIndex) {
-    const vertexCount = geometry.getAttribute('position').count;
+    const vertexCount = geometry.getAttribute("position").count;
 
     // @deprecated
     // mergedGeometry.merge(geometry, currentVertex);
@@ -81,53 +104,49 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
     // Start of BufferGeometry.merge()
 
     {
-      const offset = currentVertex
+      const offset = currentVertex;
 
-      if ( ! ( geometry && geometry.isBufferGeometry ) ) {
-  
-        console.error( 'THREE.BufferGeometry.merge(): geometry not an instance of THREE.BufferGeometry.', geometry );
-        return;
-  
-      }
-  
-      if ( offset === undefined ) {
-  
-        offset = 0;
-  
-        console.warn(
-          'THREE.BufferGeometry.merge(): Overwriting original geometry, starting at offset=0. '
-          + 'Use BufferGeometryUtils.mergeBufferGeometries() for lossless merge.'
+      if (!(geometry && geometry.isBufferGeometry)) {
+        console.error(
+          "THREE.BufferGeometry.merge(): geometry not an instance of THREE.BufferGeometry.",
+          geometry,
         );
-  
+        return;
       }
-  
+
+      if (offset === undefined) {
+        offset = 0;
+
+        console.warn(
+          "THREE.BufferGeometry.merge(): Overwriting original geometry, starting at offset=0. " +
+            "Use BufferGeometryUtils.mergeBufferGeometries() for lossless merge.",
+        );
+      }
+
       const attributes = mergedGeometry.attributes;
-  
-      for ( const key in attributes ) {
-  
-        if ( geometry.attributes[ key ] === undefined ) continue;
-  
-        const attribute1 = attributes[ key ];
+
+      for (const key in attributes) {
+        if (geometry.attributes[key] === undefined) continue;
+
+        const attribute1 = attributes[key];
         const attributeArray1 = attribute1.array;
-  
-        const attribute2 = geometry.attributes[ key ];
+
+        const attribute2 = geometry.attributes[key];
         const attributeArray2 = attribute2.array;
-  
+
         const attributeOffset = attribute2.itemSize * offset;
-        const length = Math.min( attributeArray2.length, attributeArray1.length - attributeOffset );
-  
-        for ( let i = 0, j = attributeOffset; i < length; i ++, j ++ ) {
-  
-          attributeArray1[ j ] = attributeArray2[ i ];
-  
+        const length = Math.min(
+          attributeArray2.length,
+          attributeArray1.length - attributeOffset,
+        );
+
+        for (let i = 0, j = attributeOffset; i < length; i++, j++) {
+          attributeArray1[j] = attributeArray2[i];
         }
-  
-      }  
+      }
     }
-  
 
     // End of BufferGeometry.merge()
-
 
     const meshIndex = geometry.getIndex();
     for (let i = 0; i < meshIndex.count; i++) {
@@ -135,7 +154,11 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
     }
 
     for (let i = 0; i < vertexCount; i++) {
-      materialMeshIndexAttrib.setXY(currentVertex + i, materialIndex, currentMesh);
+      materialMeshIndexAttrib.setXY(
+        currentVertex + i,
+        materialIndex,
+        currentMesh,
+      );
     }
 
     currentVertex += vertexCount;
@@ -167,10 +190,10 @@ function cloneBufferGeometry(bufferGeometry, attributes) {
 }
 
 function addFlatGeometryIndices(geometry) {
-  const position = geometry.getAttribute('position');
+  const position = geometry.getAttribute("position");
 
   if (!position) {
-    console.warn('No position attribute');
+    console.warn("No position attribute");
     return;
   }
 

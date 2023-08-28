@@ -1,5 +1,5 @@
-import vertex from './glsl/fullscreenQuad.vert';
-import { makeVertexShader } from './RenderPass';
+import vertex from "./glsl/fullscreenQuad.vert";
+import { makeVertexShader } from "./RenderPass";
 
 export function makeFullscreenQuad(gl) {
   const vao = gl.createVertexArray();
@@ -7,7 +7,11 @@ export function makeFullscreenQuad(gl) {
   gl.bindVertexArray(vao);
 
   gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]), gl.STATIC_DRAW);
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]),
+    gl.STATIC_DRAW,
+  );
 
   // vertex shader should set layout(location = 0) on position attribute
   const posLoc = 0;
@@ -26,6 +30,6 @@ export function makeFullscreenQuad(gl) {
 
   return {
     draw,
-    vertexShader
+    vertexShader,
   };
 }

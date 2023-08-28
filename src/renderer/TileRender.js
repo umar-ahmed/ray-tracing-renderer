@@ -1,4 +1,4 @@
-import { clamp } from './util';
+import { clamp } from "./util";
 
 // TileRender is based on the concept of a compute shader's work group.
 
@@ -49,7 +49,9 @@ export function makeTileRender(gl) {
     const aspectRatio = width / height;
 
     // quantize the width of the tile so that it evenly divides the entire window
-    tileWidth = Math.ceil(width / Math.round(width / Math.sqrt(pixelsPerTile * aspectRatio)));
+    tileWidth = Math.ceil(
+      width / Math.round(width / Math.sqrt(pixelsPerTile * aspectRatio)),
+    );
     tileHeight = Math.ceil(tileWidth / aspectRatio);
 
     columns = Math.ceil(width / tileWidth);
@@ -62,7 +64,7 @@ export function makeTileRender(gl) {
 
     const error = desiredMsPerTile - msPerTile;
 
-     // tweak to find balance. higher = faster convergence, lower = less fluctuations to microstutters
+    // tweak to find balance. higher = faster convergence, lower = less fluctuations to microstutters
     const strength = 5000;
 
     // sqrt prevents massive fluctuations in pixelsPerTile for the occasional stutter

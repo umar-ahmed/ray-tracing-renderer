@@ -43,7 +43,7 @@ export function makeStratifiedSampler(strataCount, dimensions) {
     let stratum = strata[index++];
 
     for (let i = 0; i < dimensions; i++) {
-      sample[i] = stratum % strataCount + Math.random();
+      sample[i] = (stratum % strataCount) + Math.random();
       stratum = Math.floor(stratum / strataCount);
     }
 
@@ -53,6 +53,6 @@ export function makeStratifiedSampler(strataCount, dimensions) {
   return {
     next,
     restart,
-    strataCount
+    strataCount,
   };
 }

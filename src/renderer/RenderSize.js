@@ -1,5 +1,5 @@
-import { clamp } from './util';
-import { Vector2 } from 'three';
+import { clamp } from "./util";
+import { Vector2 } from "three";
 
 export function makeRenderSize(gl) {
   const desiredMsPerFrame = 20;
@@ -21,7 +21,9 @@ export function makeRenderSize(gl) {
 
   function calcDimensions() {
     const aspectRatio = fullWidth / fullHeight;
-    renderWidth = Math.round(clamp(Math.sqrt(pixelsPerFrame * aspectRatio), 1, fullWidth));
+    renderWidth = Math.round(
+      clamp(Math.sqrt(pixelsPerFrame * aspectRatio), 1, fullWidth),
+    );
     renderHeight = Math.round(clamp(renderWidth / aspectRatio, 1, fullHeight));
     scale.set(renderWidth / fullWidth, renderHeight / fullHeight);
   }
@@ -31,7 +33,7 @@ export function makeRenderSize(gl) {
       return;
     }
 
-     // tweak to find balance. higher = faster convergence, lower = less fluctuations to microstutters
+    // tweak to find balance. higher = faster convergence, lower = less fluctuations to microstutters
     const strength = 600;
 
     const error = desiredMsPerFrame - elapsedFrameMs;
@@ -50,7 +52,7 @@ export function makeRenderSize(gl) {
     },
     get height() {
       return renderHeight;
-    }
+    },
   };
 }
 

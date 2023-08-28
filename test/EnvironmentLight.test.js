@@ -1,7 +1,7 @@
-import { EnvironmentLight } from 'src/EnvironmentLight';
-import * as THREE from 'three';
+import { EnvironmentLight } from "src/EnvironmentLight";
+import * as THREE from "three";
 
-describe('constructor', () => {
+describe("constructor", () => {
   let light;
   beforeEach(() => {
     light = new EnvironmentLight();

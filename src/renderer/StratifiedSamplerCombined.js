@@ -42,6 +42,6 @@ export function makeStratifiedSamplerCombined(strataCount, listOfDimensions) {
   return {
     next,
     restart,
-    strataCount
+    strataCount,
   };
 }

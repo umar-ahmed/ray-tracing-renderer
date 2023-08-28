@@ -1,6 +1,10 @@
 export function makeUniformBuffer(gl, program, blockName) {
   const blockIndex = gl.getUniformBlockIndex(program, blockName);
-  const blockSize = gl.getActiveUniformBlockParameter(program, blockIndex, gl.UNIFORM_BLOCK_DATA_SIZE);
+  const blockSize = gl.getActiveUniformBlockParameter(
+    program,
+    blockIndex,
+    gl.UNIFORM_BLOCK_DATA_SIZE,
+  );
 
   const uniforms = getUniformBlockInfo(gl, program, blockIndex);
 
@@ -18,36 +22,36 @@ export function makeUniformBuffer(gl, program, blockName) {
 
     const { type, size, offset, stride } = uniforms[name];
 
-    switch(type) {
+    switch (type) {
       case gl.FLOAT:
-        setData(data, 'setFloat32', size, offset, stride, 1, value);
+        setData(data, "setFloat32", size, offset, stride, 1, value);
         break;
       case gl.FLOAT_VEC2:
-        setData(data, 'setFloat32', size, offset, stride, 2, value);
+        setData(data, "setFloat32", size, offset, stride, 2, value);
         break;
       case gl.FLOAT_VEC3:
-        setData(data, 'setFloat32', size, offset, stride, 3, value);
+        setData(data, "setFloat32", size, offset, stride, 3, value);
         break;
       case gl.FLOAT_VEC4:
-        setData(data, 'setFloat32', size, offset, stride, 4, value);
+        setData(data, "setFloat32", size, offset, stride, 4, value);
         break;
       case gl.INT:
-        setData(data, 'setInt32', size, offset, stride, 1, value);
+        setData(data, "setInt32", size, offset, stride, 1, value);
         break;
       case gl.INT_VEC2:
-        setData(data, 'setInt32', size, offset, stride, 2, value);
+        setData(data, "setInt32", size, offset, stride, 2, value);
         break;
       case gl.INT_VEC3:
-        setData(data, 'setInt32', size, offset, stride, 3, value);
+        setData(data, "setInt32", size, offset, stride, 3, value);
         break;
       case gl.INT_VEC4:
-        setData(data, 'setInt32', size, offset, stride, 4, value);
+        setData(data, "setInt32", size, offset, stride, 4, value);
         break;
       case gl.BOOL:
-        setData(data, 'setUint32', size, offset, stride, 1, value);
+        setData(data, "setUint32", size, offset, stride, 1, value);
         break;
       default:
-        console.warn('UniformBuffer: Unsupported type');
+        console.warn("UniformBuffer: Unsupported type");
     }
   }
 
@@ -59,14 +63,22 @@ export function makeUniformBuffer(gl, program, blockName) {
 
   return {
     set,
-    bind
+    bind,
   };
 }
 
 function getUniformBlockInfo(gl, program, blockIndex) {
-  const indices = gl.getActiveUniformBlockParameter(program, blockIndex, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
+  const indices = gl.getActiveUniformBlockParameter(
+    program,
+    blockIndex,
+    gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES,
+  );
   const offset = gl.getActiveUniforms(program, indices, gl.UNIFORM_OFFSET);
-  const stride = gl.getActiveUniforms(program, indices, gl.UNIFORM_ARRAY_STRIDE);
+  const stride = gl.getActiveUniforms(
+    program,
+    indices,
+    gl.UNIFORM_ARRAY_STRIDE,
+  );
 
   const uniforms = {};
   for (let i = 0; i < indices.length; i++) {
@@ -75,7 +87,7 @@ function getUniformBlockInfo(gl, program, blockIndex) {
       type,
       size,
       offset: offset[i],
-      stride: stride[i]
+      stride: stride[i],
     };
   }
 
@@ -86,7 +98,11 @@ function setData(dataView, setter, size, offset, stride, components, value) {
   const l = Math.min(value.length / components, size);
   for (let i = 0; i < l; i++) {
     for (let k = 0; k < components; k++) {
-      dataView[setter](offset + i * stride + k * 4, value[components * i + k], true);
+      dataView[setter](
+        offset + i * stride + k * 4,
+        value[components * i + k],
+        true,
+      );
     }
   }
 }

@@ -1,5 +1,4 @@
 export function makeFramebuffer(gl, { color, depth }) {
-
   const framebuffer = gl.createFramebuffer();
 
   function bind() {
@@ -19,18 +18,29 @@ export function makeFramebuffer(gl, { color, depth }) {
       location = Number(location);
 
       if (location === undefined) {
-        console.error('invalid location');
+        console.error("invalid location");
       }
 
       const tex = color[location];
-      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0 + location, tex.target, tex.texture, 0);
+      gl.framebufferTexture2D(
+        gl.FRAMEBUFFER,
+        gl.COLOR_ATTACHMENT0 + location,
+        tex.target,
+        tex.texture,
+        0,
+      );
       drawBuffers.push(gl.COLOR_ATTACHMENT0 + location);
     }
 
     gl.drawBuffers(drawBuffers);
 
     if (depth) {
-      gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, depth.target, depth.texture);
+      gl.framebufferRenderbuffer(
+        gl.FRAMEBUFFER,
+        gl.DEPTH_ATTACHMENT,
+        depth.target,
+        depth.texture,
+      );
     }
 
     unbind();
@@ -41,6 +51,6 @@ export function makeFramebuffer(gl, { color, depth }) {
   return {
     color,
     bind,
-    unbind
+    unbind,
   };
 }

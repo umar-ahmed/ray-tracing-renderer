@@ -6,7 +6,7 @@ export function getTexturesFromMaterials(meshes, textureNames) {
     const textures = [];
     textureMap[name] = {
       indices: texturesFromMaterials(meshes, name, textures),
-      textures
+      textures,
     };
   }
 
@@ -17,11 +17,15 @@ export function getTexturesFromMaterials(meshes, textureNames) {
 export function mergeTexturesFromMaterials(meshes, textureNames) {
   const textureMap = {
     textures: [],
-    indices: {}
+    indices: {},
   };
 
   for (const name of textureNames) {
-    textureMap.indices[name] = texturesFromMaterials(meshes, name, textureMap.textures);
+    textureMap.indices[name] = texturesFromMaterials(
+      meshes,
+      name,
+      textureMap.textures,
+    );
   }
 
   return textureMap;
@@ -31,7 +35,8 @@ function texturesFromMaterials(materials, textureName, textures) {
   const indices = [];
 
   for (const material of materials) {
-    const isTextureLoaded = material[textureName] && material[textureName].image;
+    const isTextureLoaded =
+      material[textureName] && material[textureName].image;
 
     if (!isTextureLoaded) {
       indices.push(-1);
