@@ -183,7 +183,7 @@ async function loadEnvironmentMap(path) {
   );
 
   const environmentMap = await loadPromise;
-  environmentMap.encoding = THREE.LinearEncoding;
+  environmentMap.colorSpace = THREE.LinearSRGBColorSpace;
 
   return environmentMap;
 }
