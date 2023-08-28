@@ -70,6 +70,7 @@ function init() {
   const envmap = new RGBELoader()
     .setDataType(THREE.FloatType)
     .load('envmap.hdr');
+  envmap.colorSpace = THREE.LinearSRGBColorSpace
   const envLight = new EnvironmentLight(envmap);
   scene.add(envLight);
 
@@ -131,6 +132,7 @@ function init() {
     mesh.material.roughness = 1.0;
     mesh.material.metalness = 0.0;
     mesh.material.map = new THREE.TextureLoader().load('diffuse.png');
+    mesh.material.map.colorSpace = THREE.SRGBColorSpace;
     model.add(mesh);
   }
 
@@ -167,6 +169,7 @@ function init() {
     mesh.material.roughness = 1.0;
     mesh.material.metalness = 1.0;
     mesh.material.map = new THREE.TextureLoader().load('diffuse.png');
+    mesh.material.map.colorSpace = THREE.SRGBColorSpace;
     mesh.material.normalMap = new THREE.TextureLoader().load('normal.png');
     const metalrough = new THREE.TextureLoader().load('metalrough.png');
     mesh.material.roughnessMap = metalrough;
@@ -199,6 +202,7 @@ function init() {
     mesh.material.transparent = true;
     mesh.material.solid = true;
     mesh.material.map = new THREE.TextureLoader().load('glass_diffuse.png');
+    mesh.material.map.colorSpace = THREE.SRGBColorSpace;
     mesh.material.normalMap = new THREE.TextureLoader().load('glass_normal.png');
     mesh.material.normalScale.set(1.0, -1.0);
     model.add(mesh);
@@ -259,6 +263,7 @@ function init() {
 
     // give material an unloaded async texture. the renderer should handle this
     unreadyMat.map = new THREE.TextureLoader().load('diffuse.png');
+    unreadyMat.map.colorSpace = THREE.SRGBColorSpace;
     unreadyMat.normalMap = new THREE.TextureLoader().load('normal.png');
     const metalrough = new THREE.TextureLoader().load('metalrough.png');
     unreadyMat.roughnessMap = metalrough;
