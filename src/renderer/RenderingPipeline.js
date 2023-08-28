@@ -11,7 +11,7 @@ import { makeToneMapPass } from "./ToneMapPass";
 import { clamp, numberArraysEqual } from "./util";
 import { makeTileRender } from "./TileRender";
 import { makeDepthTarget, makeTexture } from "./Texture";
-import noiseBase64 from "./texture/noise";
+import noiseBase64 from "./assets/noise";
 import { PerspectiveCamera, Vector2 } from "three";
 
 export function makeRenderingPipeline({

@@ -1,7 +1,3 @@
-// Convert image data from the RGBE format to a 32-bit floating point format
-// See https://www.cg.tuwien.ac.at/research/theses/matkovic/node84.html for a description of the RGBE format
-
-// import { rgbeToFloat } from './rgbeToFloat';
 import { clamp } from "./util";
 import * as THREE from "three";
 
@@ -23,7 +19,6 @@ export function generateBackgroundMapFromSceneBackground(background) {
       height: background.image.height,
       data: background.image.data,
     };
-    // backgroundImage.data = rgbeToFloat(backgroundImage.data);
   }
   return backgroundImage;
 }
@@ -31,7 +26,7 @@ export function generateBackgroundMapFromSceneBackground(background) {
 export function generateEnvMapFromSceneComponents(
   directionalLights,
   ambientLights,
-  environmentLights,
+  environmentLights
 ) {
   let envImage = initializeEnvMap(environmentLights);
   ambientLights.forEach((light) => {
@@ -50,18 +45,18 @@ export function initializeEnvMap(environmentLights) {
   // Initialize map from environment light if present
   if (environmentLights.length > 0) {
     // TODO: support multiple environment lights (what if they have different resolutions?)
+    // TODO: support changing environment light intensity
     const environmentLight = environmentLights[0];
     envImage = {
       width: environmentLight.map.image.width,
       height: environmentLight.map.image.height,
       data: environmentLight.map.image.data,
     };
-    // envImage.data = rgbeToFloat(envImage.data, environmentLight.intensity);
   } else {
     // initialize blank map
     envImage = generateSolidMap(
       DEFAULT_MAP_RESOLUTION.width,
-      DEFAULT_MAP_RESOLUTION.height,
+      DEFAULT_MAP_RESOLUTION.height
     );
   }
 
@@ -157,13 +152,13 @@ function addLightAtCoordinates(light, image, originCoords) {
         j,
         width,
         height,
-        currentCoords,
+        currentCoords
       );
       const falloff = intensityFromAngleFunction(
         originCoords,
         currentCoords,
         softness,
-        threshold,
+        threshold
       );
 
       if (falloff > 0) {
@@ -205,7 +200,7 @@ function getIntensityFromAngleDifferentialThresholded(
   originCoords,
   currentCoords,
   softness,
-  threshold,
+  threshold
 ) {
   const deltaPhi = getAngleDelta(originCoords.phi, currentCoords.phi);
   const deltaTheta = getAngleDelta(originCoords.theta, currentCoords.theta);
@@ -221,7 +216,7 @@ function getIntensityFromAngleDifferentialThresholded(
 function getIntensityFromAngleDifferential(
   originCoords,
   currentCoords,
-  softness,
+  softness
 ) {
   const angle = angleBetweenSphericals(originCoords, currentCoords);
   return getFalloffAtAngle(angle, softness);
@@ -254,7 +249,7 @@ const angleBetweenSphericals = (function () {
 function getFalloffAtAngle(angle, softness) {
   const softnessCoefficient = Math.pow(
     2,
-    14.5 * Math.max(0.001, 1.0 - clamp(softness, 0.0, 1.0)),
+    14.5 * Math.max(0.001, 1.0 - clamp(softness, 0.0, 1.0))
   );
   const falloff =
     Math.pow(softnessCoefficient, 1.1) *

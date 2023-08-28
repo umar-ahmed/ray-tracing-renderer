@@ -7,4 +7,4 @@ export default `
   #define INF 1.0e999
 
   #define ROUGHNESS_MIN 0.03
-`
+`;

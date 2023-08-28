@@ -106,7 +106,7 @@ export default {
       }
       intersectScene(path.ray, si);
       bounce(path, i, si);
-    `,
+    `
     )}
 
     return vec4(path.li, path.alpha);

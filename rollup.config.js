@@ -2,7 +2,7 @@ import resolve from "rollup-plugin-node-resolve";
 
 function build() {
   return {
-    input: "src/main.js",
+    input: "src/index.js",
     output: {
       file: "build/RayTracingRenderer.js",
       format: "es",

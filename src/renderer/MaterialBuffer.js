@@ -3,7 +3,7 @@ import {
   ThickMaterial,
   ShadowCatcherMaterial,
 } from "../constants";
-import materialBufferChunk from "./glsl/chunks/materialBuffer.glsl";
+import materialBufferChunk from "./shaders/glsl/chunks/materialBuffer.glsl";
 import { makeUniformBuffer } from "./UniformBuffer";
 import { makeRenderPass } from "./RenderPass";
 import { makeTexture } from "./Texture";
@@ -41,7 +41,7 @@ export function makeMaterialBuffer(gl, materials) {
     const { relativeSizes, texture } = makeTextureArray(
       gl,
       maps.map.textures,
-      true,
+      true
     );
     textures.diffuseMap = texture;
     bufferData.diffuseMapSize = relativeSizes;
@@ -52,7 +52,7 @@ export function makeMaterialBuffer(gl, materials) {
     const { relativeSizes, texture } = makeTextureArray(
       gl,
       maps.normalMap.textures,
-      false,
+      false
     );
     textures.normalMap = texture;
     bufferData.normalMapSize = relativeSizes;
@@ -63,7 +63,7 @@ export function makeMaterialBuffer(gl, materials) {
     const { relativeSizes, texture } = makeTextureArray(
       gl,
       pbrMap.textures,
-      false,
+      false
     );
     textures.pbrMap = texture;
     bufferData.pbrMapSize = relativeSizes;
@@ -77,7 +77,7 @@ export function makeMaterialBuffer(gl, materials) {
     NUM_NORMAL_MAPS: maps.normalMap.textures.length,
     NUM_DIFFUSE_NORMAL_MAPS: Math.max(
       maps.map.textures.length,
-      maps.normalMap.textures.length,
+      maps.normalMap.textures.length
     ),
     NUM_PBR_MAPS: pbrMap.textures.length,
   };
@@ -156,8 +156,8 @@ function uploadToUniformBuffer(gl, program, bufferData) {
         data: [].concat(...bufferData.color.map((d) => d.toArray())),
         channels: 3,
       },
-      { data: bufferData.type, channels: 1 },
-    ),
+      { data: bufferData.type, channels: 1 }
+    )
   );
 
   materialBuffer.set(
@@ -168,8 +168,8 @@ function uploadToUniformBuffer(gl, program, bufferData) {
       {
         data: [].concat(...bufferData.normalScale.map((d) => d.toArray())),
         channels: 2,
-      },
-    ),
+      }
+    )
   );
 
   materialBuffer.set(
@@ -178,16 +178,16 @@ function uploadToUniformBuffer(gl, program, bufferData) {
       { data: bufferData.diffuseMapIndex, channels: 1 },
       { data: bufferData.normalMapIndex, channels: 1 },
       { data: bufferData.roughnessMapIndex, channels: 1 },
-      { data: bufferData.metalnessMapIndex, channels: 1 },
-    ),
+      { data: bufferData.metalnessMapIndex, channels: 1 }
+    )
   );
 
   materialBuffer.set(
     "Materials.diffuseNormalMapSize[0]",
     interleave(
       { data: bufferData.diffuseMapSize, channels: 2 },
-      { data: bufferData.normalMapSize, channels: 2 },
-    ),
+      { data: bufferData.normalMapSize, channels: 2 }
+    )
   );
 
   materialBuffer.set("Materials.pbrMapSize[0]", bufferData.pbrMapSize);
