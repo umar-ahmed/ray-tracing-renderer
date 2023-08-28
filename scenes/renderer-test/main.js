@@ -53,7 +53,7 @@ const tick = (time) => {
   requestAnimationFrame(tick);
 };
 
-const geo = new THREE.SphereBufferGeometry(1, 24, 24);
+const geo = new THREE.SphereGeometry(1, 24, 24);
 
 function makeMesh() {
   const mat = new RayTracingMaterial();
@@ -221,7 +221,7 @@ function init() {
   // background mirror
   // verifies BVH used in reflections
   {
-    const geo = new THREE.PlaneBufferGeometry(40, 16);
+    const geo = new THREE.PlaneGeometry(40, 16);
     const mat = new THREE.MeshStandardMaterial();
     mat.roughness = 0.0;
     mat.metalness = 1.0;
@@ -232,7 +232,7 @@ function init() {
 
   // ground plane
   {
-    const geo = new THREE.PlaneBufferGeometry(1000, 1000);
+    const geo = new THREE.PlaneGeometry(1000, 1000);
     const mat = new THREE.MeshStandardMaterial();
     mat.shadowCatcher = true;
     mat.roughness = 0.5;
@@ -245,7 +245,7 @@ function init() {
   // test box with .visible set to false
   // should not be visible in the scene
   {
-    const geo = new THREE.BoxBufferGeometry(5, 5, 5);
+    const geo = new THREE.BoxGeometry(5, 5, 5);
     const mat = new THREE.MeshStandardMaterial();
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(0, 10, 0);
