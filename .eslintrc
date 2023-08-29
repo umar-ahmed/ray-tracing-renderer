@@ -1,5 +1,5 @@
 {
-  "ignorePatterns": ["node_modules/", "dist/"],
+  "ignorePatterns": ["node_modules/", "dist/", "vite.config.js"],
   "env": {
     "browser": true,
     "es6": true,

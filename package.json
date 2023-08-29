@@ -2,15 +2,23 @@
   "name": "ray-tracing-renderer",
   "version": "0.10.15",
   "description": "A [Three.js](https://github.com/mrdoob/three.js/) renderer which utilizes path tracing to render a scene with true photorealism. The renderer supports global illumination, reflections, soft shadows, and realistic environment lighting.",
-  "main": "dist/index.js",
   "type": "module",
-  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.umd.cjs",
+  "module": "dist/index.js",
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs"
+    }
   },
+  "sideEffects": false,
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch & ./node_modules/.bin/http-server",
+    "dev": "vite dev example",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint src/ test/",
     "format": "prettier --write src/ test/",
@@ -23,13 +31,10 @@
   },
   "devDependencies": {
     "@types/three": "^0.155.1",
-    "dat.gui": "^0.7.6",
     "eslint": "^7.8.1",
-    "http-server": "^0.12.3",
     "prettier": "^3.0.2",
     "stats.js": "^0.17.0",
     "three": "^0.155.0",
-    "tsup": "^7.2.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
     "vitest": "^0.34.3"
