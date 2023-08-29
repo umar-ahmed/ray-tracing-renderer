@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { partition, nthElement } from "src/renderer/accelerators/bvhUtil";
+import { partition, nthElement } from "lib/renderer/accelerators/bvhUtil";
 
 describe("partition", () => {
   const compare = (x) => x < 5;

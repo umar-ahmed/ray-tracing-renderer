@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach } from "vitest";
-import { EnvironmentLight } from "src/lights/EnvironmentLight";
+import { EnvironmentLight } from "lib/lights/EnvironmentLight";
 import * as THREE from "three";
 
 describe("constructor", () => {

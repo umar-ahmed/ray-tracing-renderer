@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach } from "vitest";
-import { clamp, shuffle } from "src/renderer/utils";
+import { clamp, shuffle } from "lib/renderer/utils";
 
 describe("clamp", () => {
   test("returns a number between [min, max]", () => {

@@ -2,7 +2,7 @@ import { describe, test, expect, beforeEach } from "vitest";
 import {
   equirectangularToSpherical,
   getAngleDelta,
-} from "src/renderer/environment/envMapCreation";
+} from "lib/renderer/environment/envMapCreation";
 import * as THREE from "three";
 
 describe("equirectangularToSpherical", () => {
