@@ -55,7 +55,6 @@ export function makeRenderingPipeline({
     materialBuffer,
     mergedMesh,
     optionalExtensions,
-    scene,
   });
 
   const reprojectPass = makeReprojectPass(gl, {
@@ -88,7 +87,10 @@ export function makeRenderingPipeline({
 
   let firstFrame = true;
 
-  let sampleRenderedCallback = () => {};
+  let sampleRenderedCallback = (
+    /** @type {number} */ _sampleCount,
+    /** @type {number} */ _delta
+  ) => {};
 
   const lastCamera = new PerspectiveCamera();
   lastCamera.position.set(1, 1, 1);
@@ -111,9 +113,14 @@ export function makeRenderingPipeline({
 
   let lastToneMappedTexture;
 
+  /**
+   * @param {any} width
+   * @param {any} height
+   */
   function initFrameBuffers(width, height) {
     const makeHdrBuffer = () =>
       makeFramebuffer(gl, {
+        depth: undefined,
         color: {
           0: makeTexture(gl, {
             width,
@@ -127,6 +134,7 @@ export function makeRenderingPipeline({
 
     const makeReprojectBuffer = () =>
       makeFramebuffer(gl, {
+        depth: undefined,
         color: {
           0: makeTexture(gl, {
             width,
@@ -216,6 +224,10 @@ export function makeRenderingPipeline({
     swapHdrBuffer();
   }
 
+  /**
+   * @param {number} w
+   * @param {number} h
+   */
   function setSize(w, h) {
     screenWidth = w;
     screenHeight = h;
@@ -227,11 +239,18 @@ export function makeRenderingPipeline({
   }
 
   // called every frame to update clock
+  /**
+   * @param {number} newTime
+   */
   function time(newTime) {
     elapsedFrameTime = newTime - frameTime;
     frameTime = newTime;
   }
 
+  /**
+   * @param {{ matrixWorld: { elements: any; }; aspect: any; fov: any; }} cam1
+   * @param {PerspectiveCamera} cam2
+   */
   function areCamerasEqual(cam1, cam2) {
     return (
       numberArraysEqual(cam1.matrixWorld.elements, cam2.matrixWorld.elements) &&
@@ -240,6 +259,10 @@ export function makeRenderingPipeline({
     );
   }
 
+  /**
+   * @param {number} width
+   * @param {number} height
+   */
   function updateSeed(width, height, useJitter = true) {
     rayTracePass.setSize(width, height);
 
@@ -258,12 +281,20 @@ export function makeRenderingPipeline({
     }
   }
 
+  /**
+   * @param {{ bind: () => void; unbind: () => void; }} buffer
+   */
   function clearBuffer(buffer) {
     buffer.bind();
     gl.clear(gl.COLOR_BUFFER_BIT);
     buffer.unbind();
   }
 
+  /**
+   * @param {{ bind: () => void; unbind: () => void; }} buffer
+   * @param {number} width
+   * @param {number} height
+   */
   function addSampleToBuffer(buffer, width, height) {
     buffer.bind();
 
@@ -278,6 +309,11 @@ export function makeRenderingPipeline({
     buffer.unbind();
   }
 
+  /**
+   * @param {{ bind: () => void; unbind: () => void; }} buffer
+   * @param {any} width
+   * @param {any} height
+   */
   function newSampleToBuffer(buffer, width, height) {
     buffer.bind();
     gl.viewport(0, 0, width, height);
@@ -285,6 +321,10 @@ export function makeRenderingPipeline({
     buffer.unbind();
   }
 
+  /**
+   * @param {any} lightTexture
+   * @param {Vector2} lightScale
+   */
   function toneMapToScreen(lightTexture, lightScale) {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     toneMapPass.draw({
@@ -313,6 +353,13 @@ export function makeRenderingPipeline({
     });
   }
 
+  /**
+   * @param {any} buffer
+   * @param {number} x
+   * @param {number} y
+   * @param {any} width
+   * @param {any} height
+   */
   function renderTile(buffer, x, y, width, height) {
     gl.scissor(x, y, width, height);
     gl.enable(gl.SCISSOR_TEST);
@@ -320,6 +367,10 @@ export function makeRenderingPipeline({
     gl.disable(gl.SCISSOR_TEST);
   }
 
+  /**
+   * @param {any} camera
+   * @param {PerspectiveCamera} lastCamera
+   */
   function setCameras(camera, lastCamera) {
     rayTracePass.setCamera(camera);
     gBufferPass.setCamera(camera);
@@ -409,6 +460,9 @@ export function makeRenderingPipeline({
     }
   }
 
+  /**
+   * @param {any} camera
+   */
   function draw(camera) {
     if (!ready) {
       return;
@@ -420,7 +474,7 @@ export function makeRenderingPipeline({
       if (firstFrame) {
         firstFrame = false;
       } else {
-        drawPreview(camera, lastCamera);
+        drawPreview();
         numPreviewsRendered++;
       }
       tileRender.reset();
@@ -434,6 +488,9 @@ export function makeRenderingPipeline({
   // debug draw call to measure performance
   // use full resolution buffers every frame
   // reproject every frame
+  /**
+   * @param {any} camera
+   */
   function drawFull(camera) {
     if (!ready) {
       return;
@@ -453,7 +510,7 @@ export function makeRenderingPipeline({
 
     updateSeed(screenWidth, screenHeight, true);
 
-    renderGBuffer(camera);
+    renderGBuffer();
 
     rayTracePass.bindTextures();
     addSampleToBuffer(hdrBuffer, screenWidth, screenHeight);
