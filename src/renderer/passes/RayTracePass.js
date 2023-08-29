@@ -1,3 +1,4 @@
+// @ts-check
 import { bvhAccel, flattenBvh } from "../accelerators/bvhAccel";
 import {
   generateEnvMapFromSceneComponents,
@@ -19,7 +20,7 @@ export function makeRayTracePass(
     materialBuffer,
     mergedMesh,
     optionalExtensions,
-  },
+  }
 ) {
   bounces = clamp(bounces, 1, 6);
 
@@ -61,7 +62,7 @@ export function makeRayTracePass(
         wrapS: gl.REPEAT,
         wrapT: gl.REPEAT,
         storage: "halfFloat",
-      }),
+      })
     );
   }
 
@@ -70,7 +71,7 @@ export function makeRayTracePass(
     renderPass.setUniform("camera.aspect", camera.aspect);
     renderPass.setUniform(
       "camera.fov",
-      0.5 / Math.tan((0.5 * Math.PI * camera.fov) / 180),
+      0.5 / Math.tan((0.5 * Math.PI * camera.fov) / 180)
     );
   }
 
@@ -143,10 +144,10 @@ function makeRenderPassFromScene({
   const { background, directionalLights, ambientLights, environmentLights } =
     decomposedScene;
 
-  const { geometry, materials, materialIndices } = mergedMesh;
+  const { geometry, materials } = mergedMesh;
 
   // create bounding volume hierarchy from a static scene
-  const bvh = bvhAccel(geometry, materialIndices);
+  const bvh = bvhAccel(geometry);
   const flattenedBvh = flattenBvh(bvh);
   const numTris = geometry.index.count / 3;
 
@@ -156,7 +157,7 @@ function makeRenderPassFromScene({
       BVH_COLUMNS: textureDimensionsFromArray(flattenedBvh.count).columnsLog,
       INDEX_COLUMNS: textureDimensionsFromArray(numTris).columnsLog,
       VERTEX_COLUMNS: textureDimensionsFromArray(
-        geometry.attributes.position.count,
+        geometry.attributes.position.count
       ).columnsLog,
       STACK_SIZE: flattenedBvh.maxDepth,
       BOUNCES: bounces,
@@ -175,28 +176,28 @@ function makeRenderPassFromScene({
 
   renderPass.setTexture(
     "positionBuffer",
-    makeDataTexture(gl, geometry.getAttribute("position").array, 3),
+    makeDataTexture(gl, geometry.getAttribute("position").array, 3)
   );
 
   renderPass.setTexture(
     "normalBuffer",
-    makeDataTexture(gl, geometry.getAttribute("normal").array, 3),
+    makeDataTexture(gl, geometry.getAttribute("normal").array, 3)
   );
 
   renderPass.setTexture(
     "uvBuffer",
-    makeDataTexture(gl, geometry.getAttribute("uv").array, 2),
+    makeDataTexture(gl, geometry.getAttribute("uv").array, 2)
   );
 
   renderPass.setTexture(
     "bvhBuffer",
-    makeDataTexture(gl, flattenedBvh.buffer, 4),
+    makeDataTexture(gl, flattenedBvh.buffer, 4)
   );
 
   const envImage = generateEnvMapFromSceneComponents(
     directionalLights,
     ambientLights,
-    environmentLights,
+    environmentLights
   );
   const envImageTextureObject = makeTexture(gl, {
     data: envImage.data,
@@ -236,7 +237,7 @@ function makeRenderPassFromScene({
       storage: "halfFloat",
       width: distribution.width,
       height: distribution.height,
-    }),
+    })
   );
 
   return renderPass;

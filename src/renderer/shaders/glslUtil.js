@@ -1,3 +1,5 @@
+// @ts-check
+
 export function unrollLoop(indexName, start, limit, step, code) {
   let unrolled = `int ${indexName};\n`;
 

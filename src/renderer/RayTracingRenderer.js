@@ -1,3 +1,5 @@
+// @ts-check
+
 import { loadExtensions } from "./gl/glUtil";
 import { makeRenderingPipeline } from "./RenderingPipeline";
 import * as THREE from "three";
@@ -62,7 +64,10 @@ export function RayTracingRenderer(params = {}) {
     });
 
     pipeline.onSampleRendered = (...args) => {
-      if (module.onSampleRendered) {
+      if (
+        module.onSampleRendered &&
+        typeof module.onSampleRendered === "function"
+      ) {
         module.onSampleRendered(...args);
       }
     };
@@ -145,7 +150,7 @@ export function RayTracingRenderer(params = {}) {
     if (isNaN(currentTime)) {
       if (!syncWarning) {
         console.warn(
-          "Ray Tracing Renderer warning: For improved performance, please call renderer.sync(time) before render.render(scene, camera), with the time parameter equalling the parameter passed to the callback of requestAnimationFrame",
+          "Ray Tracing Renderer warning: For improved performance, please call renderer.sync(time) before render.render(scene, camera), with the time parameter equalling the parameter passed to the callback of requestAnimationFrame"
         );
         syncWarning = true;
       }

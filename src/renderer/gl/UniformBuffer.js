@@ -1,9 +1,10 @@
+// @ts-check
 export function makeUniformBuffer(gl, program, blockName) {
   const blockIndex = gl.getUniformBlockIndex(program, blockName);
   const blockSize = gl.getActiveUniformBlockParameter(
     program,
     blockIndex,
-    gl.UNIFORM_BLOCK_DATA_SIZE,
+    gl.UNIFORM_BLOCK_DATA_SIZE
   );
 
   const uniforms = getUniformBlockInfo(gl, program, blockIndex);
@@ -71,13 +72,13 @@ function getUniformBlockInfo(gl, program, blockIndex) {
   const indices = gl.getActiveUniformBlockParameter(
     program,
     blockIndex,
-    gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES,
+    gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES
   );
   const offset = gl.getActiveUniforms(program, indices, gl.UNIFORM_OFFSET);
   const stride = gl.getActiveUniforms(
     program,
     indices,
-    gl.UNIFORM_ARRAY_STRIDE,
+    gl.UNIFORM_ARRAY_STRIDE
   );
 
   const uniforms = {};
@@ -101,7 +102,7 @@ function setData(dataView, setter, size, offset, stride, components, value) {
       dataView[setter](
         offset + i * stride + k * 4,
         value[components * i + k],
-        true,
+        true
       );
     }
   }

@@ -1,3 +1,4 @@
+// @ts-check
 import { makeRenderPass } from "./RenderPass";
 import vertex from "../shaders/glsl/gBuffer.vert";
 import fragment from "../shaders/glsl/gBuffer.frag";
@@ -69,25 +70,25 @@ function uploadAttributes(gl, renderPass, geometry) {
   setAttribute(
     gl,
     renderPass.attribLocs.aPosition,
-    geometry.getAttribute("position"),
+    geometry.getAttribute("position")
   );
   setAttribute(
     gl,
     renderPass.attribLocs.aNormal,
-    geometry.getAttribute("normal"),
+    geometry.getAttribute("normal")
   );
   setAttribute(gl, renderPass.attribLocs.aUv, geometry.getAttribute("uv"));
   setAttribute(
     gl,
     renderPass.attribLocs.aMaterialMeshIndex,
-    geometry.getAttribute("materialMeshIndex"),
+    geometry.getAttribute("materialMeshIndex")
   );
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gl.createBuffer());
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     geometry.getIndex().array,
-    gl.STATIC_DRAW,
+    gl.STATIC_DRAW
   );
 }
 

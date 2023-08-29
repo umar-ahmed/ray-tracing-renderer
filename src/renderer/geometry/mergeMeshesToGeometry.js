@@ -1,4 +1,6 @@
-import { BufferGeometry, BufferAttribute } from "three";
+// @ts-check
+
+import * as THREE from "three";
 
 export function mergeMeshesToGeometry(meshes) {
   let vertexCount = 0;
@@ -12,9 +14,15 @@ export function mergeMeshesToGeometry(meshes) {
       continue;
     }
 
-    const geometry = mesh.geometry.isBufferGeometry
-      ? cloneBufferGeometry(mesh.geometry, ["position", "normal", "uv"]) // BufferGeometry object
-      : new BufferGeometry().fromGeometry(mesh.geometry); // Geometry object
+    if (!mesh.geometry.isBufferGeometry) {
+      throw new Error("Only BufferGeometry is supported");
+    }
+
+    const geometry = cloneBufferGeometry(mesh.geometry, [
+      "position",
+      "normal",
+      "uv",
+    ]);
 
     const index = geometry.getIndex();
     if (!index) {
@@ -48,7 +56,7 @@ export function mergeMeshesToGeometry(meshes) {
   const geometry = mergeGeometry(
     geometryAndMaterialIndex,
     vertexCount,
-    indexCount,
+    indexCount
   );
 
   return {
@@ -58,33 +66,33 @@ export function mergeMeshesToGeometry(meshes) {
 }
 
 function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
-  const positionAttrib = new BufferAttribute(
+  const positionAttrib = new THREE.BufferAttribute(
     new Float32Array(3 * vertexCount),
     3,
-    false,
+    false
   );
-  const normalAttrib = new BufferAttribute(
+  const normalAttrib = new THREE.BufferAttribute(
     new Float32Array(3 * vertexCount),
     3,
-    false,
+    false
   );
-  const uvAttrib = new BufferAttribute(
+  const uvAttrib = new THREE.BufferAttribute(
     new Float32Array(2 * vertexCount),
     2,
-    false,
+    false
   );
-  const materialMeshIndexAttrib = new BufferAttribute(
+  const materialMeshIndexAttrib = new THREE.BufferAttribute(
     new Int32Array(2 * vertexCount),
     2,
-    false,
+    false
   );
-  const indexAttrib = new BufferAttribute(
+  const indexAttrib = new THREE.BufferAttribute(
     new Uint32Array(indexCount),
     1,
-    false,
+    false
   );
 
-  const mergedGeometry = new BufferGeometry();
+  const mergedGeometry = new THREE.BufferGeometry();
   mergedGeometry.setAttribute("position", positionAttrib);
   mergedGeometry.setAttribute("normal", normalAttrib);
   mergedGeometry.setAttribute("uv", uvAttrib);
@@ -109,7 +117,7 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
       if (!(geometry && geometry.isBufferGeometry)) {
         console.error(
           "THREE.BufferGeometry.merge(): geometry not an instance of THREE.BufferGeometry.",
-          geometry,
+          geometry
         );
         return;
       }
@@ -119,7 +127,7 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
 
         console.warn(
           "THREE.BufferGeometry.merge(): Overwriting original geometry, starting at offset=0. " +
-            "Use BufferGeometryUtils.mergeBufferGeometries() for lossless merge.",
+            "Use BufferGeometryUtils.mergeBufferGeometries() for lossless merge."
         );
       }
 
@@ -137,7 +145,7 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
         const attributeOffset = attribute2.itemSize * offset;
         const length = Math.min(
           attributeArray2.length,
-          attributeArray1.length - attributeOffset,
+          attributeArray1.length - attributeOffset
         );
 
         for (let i = 0, j = attributeOffset; i < length; i++, j++) {
@@ -157,7 +165,7 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
       materialMeshIndexAttrib.setXY(
         currentVertex + i,
         materialIndex,
-        currentMesh,
+        currentMesh
       );
     }
 
@@ -172,7 +180,7 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
 // Similar to buffergeometry.clone(), except we only copy
 // specific attributes instead of everything
 function cloneBufferGeometry(bufferGeometry, attributes) {
-  const newGeometry = new BufferGeometry();
+  const newGeometry = new THREE.BufferGeometry();
 
   for (const name of attributes) {
     const attrib = bufferGeometry.getAttribute(name);
@@ -203,7 +211,7 @@ function addFlatGeometryIndices(geometry) {
     index[i] = i;
   }
 
-  geometry.setIndex(new BufferAttribute(index, 1, false));
+  geometry.setIndex(new THREE.BufferAttribute(index, 1, false));
 
   return geometry;
 }

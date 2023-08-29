@@ -1,3 +1,4 @@
+// @ts-check
 import { clamp } from "../utils";
 
 export function makeTexture(gl, params) {
@@ -69,7 +70,7 @@ export function makeTexture(gl, params) {
     channels,
     storage,
     data,
-    gammaCorrection,
+    gammaCorrection
   );
 
   if (dataArray) {
@@ -82,7 +83,7 @@ export function makeTexture(gl, params) {
 
       gl.pixelStorei(
         gl.UNPACK_FLIP_Y_WEBGL,
-        Array.isArray(flipY) ? flipY[i] : flipY,
+        Array.isArray(flipY) ? flipY[i] : flipY
       );
 
       gl.texSubImage3D(
@@ -96,7 +97,7 @@ export function makeTexture(gl, params) {
         1,
         format,
         type,
-        dataArray[i],
+        dataArray[i]
       );
     }
   } else if (length > 1) {

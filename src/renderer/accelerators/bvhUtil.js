@@ -1,3 +1,5 @@
+// @ts-check
+
 // Reorders the elements in the range [first, last) in such a way that
 // all elements for which the comparator c returns true
 // precede the elements for which comparator c returns false.
@@ -31,7 +33,7 @@ export function nthElement(
   compare,
   left = 0,
   right = array.length,
-  k = Math.floor((left + right) / 2),
+  k = Math.floor((left + right) / 2)
 ) {
   for (let i = left; i <= k; i++) {
     let minIndex = i;

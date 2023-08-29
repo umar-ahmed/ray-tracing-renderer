@@ -1,3 +1,4 @@
+// @ts-check
 export function makeFramebuffer(gl, { color, depth }) {
   const framebuffer = gl.createFramebuffer();
 
@@ -27,7 +28,7 @@ export function makeFramebuffer(gl, { color, depth }) {
         gl.COLOR_ATTACHMENT0 + location,
         tex.target,
         tex.texture,
-        0,
+        0
       );
       drawBuffers.push(gl.COLOR_ATTACHMENT0 + location);
     }
@@ -39,7 +40,7 @@ export function makeFramebuffer(gl, { color, depth }) {
         gl.FRAMEBUFFER,
         gl.DEPTH_ATTACHMENT,
         depth.target,
-        depth.texture,
+        depth.texture
       );
     }
 

@@ -1,3 +1,5 @@
+// @ts-check
+
 /*
 Stratified Sampling
 http://www.pbr-book.org/3ed-2018/Sampling_and_Reconstruction/Stratified_Sampling.html

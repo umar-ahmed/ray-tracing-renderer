@@ -1,3 +1,4 @@
+// @ts-check
 import { clamp } from "../utils";
 import * as THREE from "three";
 
@@ -26,7 +27,7 @@ export function generateBackgroundMapFromSceneBackground(background) {
 export function generateEnvMapFromSceneComponents(
   directionalLights,
   ambientLights,
-  environmentLights,
+  environmentLights
 ) {
   let envImage = initializeEnvMap(environmentLights);
   ambientLights.forEach((light) => {
@@ -56,7 +57,7 @@ export function initializeEnvMap(environmentLights) {
     // initialize blank map
     envImage = generateSolidMap(
       DEFAULT_MAP_RESOLUTION.width,
-      DEFAULT_MAP_RESOLUTION.height,
+      DEFAULT_MAP_RESOLUTION.height
     );
   }
 
@@ -152,13 +153,13 @@ function addLightAtCoordinates(light, image, originCoords) {
         j,
         width,
         height,
-        currentCoords,
+        currentCoords
       );
       const falloff = intensityFromAngleFunction(
         originCoords,
         currentCoords,
         softness,
-        threshold,
+        threshold
       );
 
       if (falloff > 0) {
@@ -194,13 +195,15 @@ function findThreshold(softness) {
       return angle;
     }
   }
+
+  throw new Error(`Could not find threshold (softness=${softness})`);
 }
 
 function getIntensityFromAngleDifferentialThresholded(
   originCoords,
   currentCoords,
   softness,
-  threshold,
+  threshold
 ) {
   const deltaPhi = getAngleDelta(originCoords.phi, currentCoords.phi);
   const deltaTheta = getAngleDelta(originCoords.theta, currentCoords.theta);
@@ -216,7 +219,7 @@ function getIntensityFromAngleDifferentialThresholded(
 function getIntensityFromAngleDifferential(
   originCoords,
   currentCoords,
-  softness,
+  softness
 ) {
   const angle = angleBetweenSphericals(originCoords, currentCoords);
   return getFalloffAtAngle(angle, softness);
@@ -249,7 +252,7 @@ const angleBetweenSphericals = (function () {
 function getFalloffAtAngle(angle, softness) {
   const softnessCoefficient = Math.pow(
     2,
-    14.5 * Math.max(0.001, 1.0 - clamp(softness, 0.0, 1.0)),
+    14.5 * Math.max(0.001, 1.0 - clamp(softness, 0.0, 1.0))
   );
   const falloff =
     Math.pow(softnessCoefficient, 1.1) *

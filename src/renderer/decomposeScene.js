@@ -1,3 +1,4 @@
+// @ts-check
 import * as THREE from "three";
 
 export function decomposeScene(scene) {
@@ -13,7 +14,7 @@ export function decomposeScene(scene) {
       } else if (!child.material.isMeshStandardMaterial) {
         console.warn(
           child,
-          "must use MeshStandardMaterial in order to be rendered.",
+          "must use MeshStandardMaterial in order to be rendered."
         );
       } else {
         meshes.push(child);
@@ -26,7 +27,7 @@ export function decomposeScene(scene) {
       if (environmentLights.length > 1) {
         console.warn(
           environmentLights,
-          "only one environment light can be used per scene",
+          "only one environment light can be used per scene"
         );
       }
       // Valid lights have HDR texture map in LinearSRGBColorSpace
@@ -35,7 +36,7 @@ export function decomposeScene(scene) {
       } else {
         console.warn(
           child,
-          "environment light does not use color value or map with THREE.LinearSRGBColorSpace",
+          "environment light does not use color value or map with THREE.LinearSRGBColorSpace"
         );
       }
     }

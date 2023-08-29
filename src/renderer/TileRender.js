@@ -1,3 +1,4 @@
+// @ts-check
 import { clamp } from "./utils";
 
 // TileRender is based on the concept of a compute shader's work group.
@@ -50,7 +51,7 @@ export function makeTileRender(gl) {
 
     // quantize the width of the tile so that it evenly divides the entire window
     tileWidth = Math.ceil(
-      width / Math.round(width / Math.sqrt(pixelsPerTile * aspectRatio)),
+      width / Math.round(width / Math.sqrt(pixelsPerTile * aspectRatio))
     );
     tileHeight = Math.ceil(tileWidth / aspectRatio);
 
@@ -117,5 +118,9 @@ function pixelsPerTileEstimate(gl) {
     return 400000;
   } else if (maxRenderbufferSize >= 32768) {
     return 600000;
+  } else {
+    throw new Error(
+      `unsupported max renderbuffer size (maxRenderbufferSize=${maxRenderbufferSize})`
+    );
   }
 }

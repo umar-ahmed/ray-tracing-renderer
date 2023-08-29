@@ -1,3 +1,4 @@
+// @ts-check
 import { clamp } from "../utils";
 import { Vector2 } from "three";
 
@@ -22,7 +23,7 @@ export function makeRenderSize(gl) {
   function calcDimensions() {
     const aspectRatio = fullWidth / fullHeight;
     renderWidth = Math.round(
-      clamp(Math.sqrt(pixelsPerFrame * aspectRatio), 1, fullWidth),
+      clamp(Math.sqrt(pixelsPerFrame * aspectRatio), 1, fullWidth)
     );
     renderHeight = Math.round(clamp(renderWidth / aspectRatio, 1, fullHeight));
     scale.set(renderWidth / fullWidth, renderHeight / fullHeight);
@@ -65,5 +66,9 @@ function pixelsPerFrameEstimate(gl) {
     return 150000;
   } else if (maxRenderbufferSize >= 32768) {
     return 400000;
+  } else {
+    throw new Error(
+      `Unsupported max renderbuffer size (maxRenderbufferSize=${maxRenderbufferSize})`
+    );
   }
 }
