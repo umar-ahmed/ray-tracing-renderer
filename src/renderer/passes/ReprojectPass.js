@@ -18,7 +18,7 @@ export function makeReprojectPass(gl, params) {
   function setPreviousCamera(camera) {
     historyCamera.multiplyMatrices(
       camera.projectionMatrix,
-      camera.matrixWorldInverse
+      camera.matrixWorldInverse,
     );
 
     renderPass.setUniform("historyCamera", historyCamera.elements);
@@ -44,7 +44,7 @@ export function makeReprojectPass(gl, params) {
     renderPass.setUniform(
       "previousLightScale",
       previousLightScale.x,
-      previousLightScale.y
+      previousLightScale.y,
     );
 
     renderPass.setTexture("lightTex", light);

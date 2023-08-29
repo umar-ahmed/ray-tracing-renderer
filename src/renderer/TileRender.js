@@ -50,7 +50,7 @@ export function makeTileRender(gl) {
 
     // quantize the width of the tile so that it evenly divides the entire window
     tileWidth = Math.ceil(
-      width / Math.round(width / Math.sqrt(pixelsPerTile * aspectRatio))
+      width / Math.round(width / Math.sqrt(pixelsPerTile * aspectRatio)),
     );
     tileHeight = Math.ceil(tileWidth / aspectRatio);
 

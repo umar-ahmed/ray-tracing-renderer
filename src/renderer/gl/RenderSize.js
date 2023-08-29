@@ -22,7 +22,7 @@ export function makeRenderSize(gl) {
   function calcDimensions() {
     const aspectRatio = fullWidth / fullHeight;
     renderWidth = Math.round(
-      clamp(Math.sqrt(pixelsPerFrame * aspectRatio), 1, fullWidth)
+      clamp(Math.sqrt(pixelsPerFrame * aspectRatio), 1, fullWidth),
     );
     renderHeight = Math.round(clamp(renderWidth / aspectRatio, 1, fullHeight));
     scale.set(renderWidth / fullWidth, renderHeight / fullHeight);

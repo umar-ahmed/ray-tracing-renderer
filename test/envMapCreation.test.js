@@ -1,7 +1,7 @@
 import {
   equirectangularToSpherical,
   getAngleDelta,
-} from "src/renderer/envMapCreation";
+} from "src/renderer/environment/envMapCreation";
 import * as THREE from "three";
 
 describe("equirectangularToSpherical", () => {

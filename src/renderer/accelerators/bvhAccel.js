@@ -39,7 +39,7 @@ export function flattenBvh(bvh) {
           p.faceNormal.x,
           p.faceNormal.y,
           p.faceNormal.z,
-          p.materialIndex
+          p.materialIndex,
         );
         isBounds.push(false);
       }
@@ -54,7 +54,7 @@ export function flattenBvh(bvh) {
         bounds.max.x,
         bounds.max.y,
         bounds.max.z,
-        null // pointer to second shild
+        null, // pointer to second shild
       );
 
       const i = flat.length - 1;
@@ -178,7 +178,7 @@ function recursiveBuild(primitiveInfo, start, end) {
         (a, b) => a.center[dim] < b.center[dim],
         start,
         end,
-        mid
+        mid,
       );
     } else if (centroidBounds.max[dim] === centroidBounds.min[dim]) {
       // can't split primitives based on centroid bounds. terminate.
@@ -195,7 +195,7 @@ function recursiveBuild(primitiveInfo, start, end) {
       for (let i = start; i < end; i++) {
         let b = Math.floor(
           buckets.length *
-            boxOffset(centroidBounds, dim, primitiveInfo[i].center)
+            boxOffset(centroidBounds, dim, primitiveInfo[i].center),
         );
         if (b === buckets.length) {
           b = buckets.length - 1;
@@ -222,7 +222,7 @@ function recursiveBuild(primitiveInfo, start, end) {
         cost.push(
           0.1 +
             (count0 * surfaceArea(b0) + count1 * surfaceArea(b1)) /
-              surfaceArea(bounds)
+              surfaceArea(bounds),
         );
       }
 
@@ -239,7 +239,7 @@ function recursiveBuild(primitiveInfo, start, end) {
         primitiveInfo,
         (p) => {
           let b = Math.floor(
-            buckets.length * boxOffset(centroidBounds, dim, p.center)
+            buckets.length * boxOffset(centroidBounds, dim, p.center),
           );
           if (b === buckets.length) {
             b = buckets.length - 1;
@@ -247,14 +247,14 @@ function recursiveBuild(primitiveInfo, start, end) {
           return b <= minCostSplitBucket;
         },
         start,
-        end
+        end,
       );
     }
 
     return makeInteriorNode(
       dim,
       recursiveBuild(primitiveInfo, start, mid),
-      recursiveBuild(primitiveInfo, mid, end)
+      recursiveBuild(primitiveInfo, mid, end),
     );
   }
 }

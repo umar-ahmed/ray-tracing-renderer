@@ -10,7 +10,7 @@ export function makeFullscreenQuad(gl) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
     new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   // vertex shader should set layout(location = 0) on position attribute

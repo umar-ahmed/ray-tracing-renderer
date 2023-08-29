@@ -1,4 +1,4 @@
-import { EnvironmentLight } from "src/EnvironmentLight";
+import { EnvironmentLight } from "src/lights/EnvironmentLight";
 import * as THREE from "three";
 
 describe("constructor", () => {

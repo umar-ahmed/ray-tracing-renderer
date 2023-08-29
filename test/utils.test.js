@@ -1,4 +1,4 @@
-import { clamp, shuffle } from "src/renderer/util";
+import { clamp, shuffle } from "src/renderer/utils";
 
 describe("clamp", () => {
   test("returns a number between [min, max]", () => {

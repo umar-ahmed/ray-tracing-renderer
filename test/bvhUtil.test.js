@@ -1,4 +1,4 @@
-import { partition, nthElement } from "src/renderer/bvhUtil";
+import { partition, nthElement } from "src/renderer/accelerators/bvhUtil";
 
 describe("partition", () => {
   const compare = (x) => x < 5;
