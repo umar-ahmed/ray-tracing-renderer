@@ -50,7 +50,7 @@ export function makeTileRender(gl) {
 
     // quantize the width of the tile so that it evenly divides the entire window
     tileWidth = Math.ceil(
-      width / Math.round(width / Math.sqrt(pixelsPerTile * aspectRatio))
+      width / Math.round(width / Math.sqrt(pixelsPerTile * aspectRatio)),
     );
     tileHeight = Math.ceil(tileWidth / aspectRatio);
 
@@ -119,7 +119,7 @@ function pixelsPerTileEstimate(gl) {
     return 600000;
   } else {
     throw new Error(
-      `unsupported max renderbuffer size (maxRenderbufferSize=${maxRenderbufferSize})`
+      `unsupported max renderbuffer size (maxRenderbufferSize=${maxRenderbufferSize})`,
     );
   }
 }

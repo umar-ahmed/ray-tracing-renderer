@@ -27,7 +27,7 @@ export function makeFramebuffer(gl, { color, depth }) {
         gl.COLOR_ATTACHMENT0 + locationAsNumber,
         tex.target,
         tex.texture,
-        0
+        0,
       );
       drawBuffers.push(gl.COLOR_ATTACHMENT0 + locationAsNumber);
     }
@@ -39,7 +39,7 @@ export function makeFramebuffer(gl, { color, depth }) {
         gl.FRAMEBUFFER,
         gl.DEPTH_ATTACHMENT,
         depth.target,
-        depth.texture
+        depth.texture,
       );
     }
 

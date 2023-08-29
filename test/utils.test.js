@@ -1,3 +1,4 @@
+import { describe, test, expect, beforeEach } from "vitest";
 import { clamp, shuffle } from "src/renderer/utils";
 
 describe("clamp", () => {

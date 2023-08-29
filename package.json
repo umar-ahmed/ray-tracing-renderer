@@ -2,33 +2,37 @@
   "name": "ray-tracing-renderer",
   "version": "0.10.15",
   "description": "A [Three.js](https://github.com/mrdoob/three.js/) renderer which utilizes path tracing to render a scene with true photorealism. The renderer supports global illumination, reflections, soft shadows, and realistic environment lighting.",
-  "main": "build/RayTracingRenderer.js",
+  "main": "dist/index.js",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "scripts": {
-    "build": "rollup -c",
-    "dev": "./node_modules/.bin/rollup -cw --environment DEV & ./node_modules/.bin/http-server",
-    "test": "jest",
+    "build": "tsup",
+    "dev": "tsup --watch & ./node_modules/.bin/http-server",
+    "test": "vitest",
     "lint": "eslint src/ test/",
     "format": "prettier --write src/ test/",
     "typecheck": "tsc --noEmit"
   },
   "author": "HOVER Inc",
   "license": "MIT",
+  "peerDependencies": {
+    "three": "^0.155.0"
+  },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/preset-env": "^7.11.5",
     "@types/three": "^0.155.1",
-    "babel-jest": "^26.0.1",
     "dat.gui": "^0.7.6",
     "eslint": "^7.8.1",
     "http-server": "^0.12.3",
-    "jest": "^26.0.1",
     "prettier": "^3.0.2",
-    "rollup": "^2.26.10",
-    "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-node-resolve": "^5.2.0",
     "stats.js": "^0.17.0",
     "three": "^0.155.0",
-    "typescript": "^5.2.2"
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9",
+    "vitest": "^0.34.3"
   },
   "repository": {
     "type": "git",

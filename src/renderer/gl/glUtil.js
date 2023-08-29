@@ -30,7 +30,7 @@ export function createProgram(
   vertexShader,
   fragmentShader,
   transformVaryings,
-  transformBufferMode
+  transformBufferMode,
 ) {
   const program = gl.createProgram();
   gl.attachShader(program, vertexShader);
@@ -40,7 +40,7 @@ export function createProgram(
     gl.transformFeedbackVaryings(
       program,
       transformVaryings,
-      transformBufferMode
+      transformBufferMode,
     );
   }
 

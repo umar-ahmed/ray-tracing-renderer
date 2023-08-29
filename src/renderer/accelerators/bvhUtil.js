@@ -31,7 +31,7 @@ export function nthElement(
   compare,
   left = 0,
   right = array.length,
-  k = Math.floor((left + right) / 2)
+  k = Math.floor((left + right) / 2),
 ) {
   for (let i = left; i <= k; i++) {
     let minIndex = i;

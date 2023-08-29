@@ -24,7 +24,7 @@ export function mergeTexturesFromMaterials(meshes, textureNames) {
     textureMap.indices[name] = texturesFromMaterials(
       meshes,
       name,
-      textureMap.textures
+      textureMap.textures,
     );
   }
 

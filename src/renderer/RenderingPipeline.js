@@ -89,7 +89,7 @@ export function makeRenderingPipeline({
 
   let sampleRenderedCallback = (
     /** @type {number} */ _sampleCount,
-    /** @type {number} */ _delta
+    /** @type {number} */ _delta,
   ) => {};
 
   const lastCamera = new PerspectiveCamera();

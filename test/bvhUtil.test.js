@@ -1,3 +1,4 @@
+import { describe, test, expect } from "vitest";
 import { partition, nthElement } from "src/renderer/accelerators/bvhUtil";
 
 describe("partition", () => {

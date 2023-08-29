@@ -54,7 +54,7 @@ export function mergeMeshesToGeometry(meshes) {
   const geometry = mergeGeometry(
     geometryAndMaterialIndex,
     vertexCount,
-    indexCount
+    indexCount,
   );
 
   return {
@@ -67,27 +67,27 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
   const positionAttrib = new THREE.BufferAttribute(
     new Float32Array(3 * vertexCount),
     3,
-    false
+    false,
   );
   const normalAttrib = new THREE.BufferAttribute(
     new Float32Array(3 * vertexCount),
     3,
-    false
+    false,
   );
   const uvAttrib = new THREE.BufferAttribute(
     new Float32Array(2 * vertexCount),
     2,
-    false
+    false,
   );
   const materialMeshIndexAttrib = new THREE.BufferAttribute(
     new Int32Array(2 * vertexCount),
     2,
-    false
+    false,
   );
   const indexAttrib = new THREE.BufferAttribute(
     new Uint32Array(indexCount),
     1,
-    false
+    false,
   );
 
   const mergedGeometry = new THREE.BufferGeometry();
@@ -115,7 +115,7 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
       if (!(geometry && geometry.isBufferGeometry)) {
         console.error(
           "THREE.BufferGeometry.merge(): geometry not an instance of THREE.BufferGeometry.",
-          geometry
+          geometry,
         );
         return;
       }
@@ -125,7 +125,7 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
 
         console.warn(
           "THREE.BufferGeometry.merge(): Overwriting original geometry, starting at offset=0. " +
-            "Use BufferGeometryUtils.mergeBufferGeometries() for lossless merge."
+            "Use BufferGeometryUtils.mergeBufferGeometries() for lossless merge.",
         );
       }
 
@@ -143,7 +143,7 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
         const attributeOffset = attribute2.itemSize * offset;
         const length = Math.min(
           attributeArray2.length,
-          attributeArray1.length - attributeOffset
+          attributeArray1.length - attributeOffset,
         );
 
         for (let i = 0, j = attributeOffset; i < length; i++, j++) {
@@ -163,7 +163,7 @@ function mergeGeometry(geometryAndMaterialIndex, vertexCount, indexCount) {
       materialMeshIndexAttrib.setXY(
         currentVertex + i,
         materialIndex,
-        currentMesh
+        currentMesh,
       );
     }
 

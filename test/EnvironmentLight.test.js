@@ -1,3 +1,4 @@
+import { describe, test, expect, beforeEach } from "vitest";
 import { EnvironmentLight } from "src/lights/EnvironmentLight";
 import * as THREE from "three";
 

@@ -1,8 +1,13 @@
-import * as THREE from 'three';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 // import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js'
-import {RGBELoader} from 'three/addons/loaders/RGBELoader.js'
-import { RayTracingRenderer, RayTracingMaterial, EnvironmentLight, LensCamera } from 'ray-tracing-renderer'
+import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
+import {
+  RayTracingRenderer,
+  RayTracingMaterial,
+  EnvironmentLight,
+  LensCamera,
+} from "ray-tracing-renderer";
 
 const renderer = new RayTracingRenderer();
 renderer.setPixelRatio(1.0);
@@ -16,9 +21,9 @@ document.body.appendChild(renderer.domElement);
 
 const stats = new Stats();
 stats.setMode(0); // 0: fps, 1: ms
-stats.domElement.style.position = 'absolute';
-stats.domElement.style.left = '0px';
-stats.domElement.style.top = '0px';
+stats.domElement.style.position = "absolute";
+stats.domElement.style.left = "0px";
+stats.domElement.style.top = "0px";
 document.body.appendChild(stats.domElement);
 
 const camera = new LensCamera();
@@ -40,7 +45,7 @@ function resize() {
   }
 }
 
-window.addEventListener('resize', resize);
+window.addEventListener("resize", resize);
 resize();
 
 const tick = (time) => {
@@ -69,8 +74,8 @@ function init() {
   // hackily setting byte type
   const envmap = new RGBELoader()
     .setDataType(THREE.FloatType)
-    .load('envmap.hdr');
-  envmap.colorSpace = THREE.LinearSRGBColorSpace
+    .load("envmap.hdr");
+  envmap.colorSpace = THREE.LinearSRGBColorSpace;
   const envLight = new EnvironmentLight(envmap);
   scene.add(envLight);
 
@@ -131,7 +136,7 @@ function init() {
     mesh.position.setZ(-15);
     mesh.material.roughness = 1.0;
     mesh.material.metalness = 0.0;
-    mesh.material.map = new THREE.TextureLoader().load('diffuse.png');
+    mesh.material.map = new THREE.TextureLoader().load("diffuse.png");
     mesh.material.map.colorSpace = THREE.SRGBColorSpace;
     model.add(mesh);
   }
@@ -144,8 +149,12 @@ function init() {
     mesh.material.roughness = 1.0;
     mesh.material.metalness = 1.0;
     mesh.material.color.set(0x333333);
-    mesh.material.roughnessMap = new THREE.TextureLoader().load('roughness.png');
-    mesh.material.metalnessMap = new THREE.TextureLoader().load('metalness.png');
+    mesh.material.roughnessMap = new THREE.TextureLoader().load(
+      "roughness.png"
+    );
+    mesh.material.metalnessMap = new THREE.TextureLoader().load(
+      "metalness.png"
+    );
     model.add(mesh);
   }
 
@@ -157,7 +166,7 @@ function init() {
     mesh.material.roughness = 0.1;
     mesh.material.metalness = 1.0;
     mesh.material.color.set(0xcccccc);
-    mesh.material.normalMap = new THREE.TextureLoader().load('normal.png');
+    mesh.material.normalMap = new THREE.TextureLoader().load("normal.png");
     model.add(mesh);
   }
 
@@ -168,10 +177,10 @@ function init() {
     mesh.position.setZ(-15);
     mesh.material.roughness = 1.0;
     mesh.material.metalness = 1.0;
-    mesh.material.map = new THREE.TextureLoader().load('diffuse.png');
+    mesh.material.map = new THREE.TextureLoader().load("diffuse.png");
     mesh.material.map.colorSpace = THREE.SRGBColorSpace;
-    mesh.material.normalMap = new THREE.TextureLoader().load('normal.png');
-    const metalrough = new THREE.TextureLoader().load('metalrough.png');
+    mesh.material.normalMap = new THREE.TextureLoader().load("normal.png");
+    const metalrough = new THREE.TextureLoader().load("metalrough.png");
     mesh.material.roughnessMap = metalrough;
     mesh.material.metalnessMap = metalrough;
     model.add(mesh);
@@ -201,9 +210,11 @@ function init() {
     const mesh = makeMesh();
     mesh.material.transparent = true;
     mesh.material.solid = true;
-    mesh.material.map = new THREE.TextureLoader().load('glass_diffuse.png');
+    mesh.material.map = new THREE.TextureLoader().load("glass_diffuse.png");
     mesh.material.map.colorSpace = THREE.SRGBColorSpace;
-    mesh.material.normalMap = new THREE.TextureLoader().load('glass_normal.png');
+    mesh.material.normalMap = new THREE.TextureLoader().load(
+      "glass_normal.png"
+    );
     mesh.material.normalScale.set(1.0, -1.0);
     model.add(mesh);
   }
@@ -260,12 +271,11 @@ function init() {
   scene.add(model);
 
   THREE.DefaultLoadingManager.onLoad = () => {
-
     // give material an unloaded async texture. the renderer should handle this
-    unreadyMat.map = new THREE.TextureLoader().load('diffuse.png');
+    unreadyMat.map = new THREE.TextureLoader().load("diffuse.png");
     unreadyMat.map.colorSpace = THREE.SRGBColorSpace;
-    unreadyMat.normalMap = new THREE.TextureLoader().load('normal.png');
-    const metalrough = new THREE.TextureLoader().load('metalrough.png');
+    unreadyMat.normalMap = new THREE.TextureLoader().load("normal.png");
+    const metalrough = new THREE.TextureLoader().load("metalrough.png");
     unreadyMat.roughnessMap = metalrough;
     unreadyMat.metalnessMap = metalrough;
 
