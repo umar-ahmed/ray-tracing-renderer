@@ -1,3 +1,4 @@
+// @ts-check
 import { PerspectiveCamera } from "three";
 
 export class LensCamera extends PerspectiveCamera {
@@ -9,5 +10,6 @@ export class LensCamera extends PerspectiveCamera {
   copy(source, recursive) {
     super.copy(source, recursive);
     this.aperture = source.aperture;
+    return this;
   }
 }

@@ -1,3 +1,4 @@
+// @ts-check
 import { DirectionalLight } from "three";
 
 export class SoftDirectionalLight extends DirectionalLight {
@@ -9,5 +10,6 @@ export class SoftDirectionalLight extends DirectionalLight {
   copy(source) {
     super.copy(source);
     this.softness = source.softness;
+    return this;
   }
 }

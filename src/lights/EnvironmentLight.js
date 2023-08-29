@@ -1,3 +1,4 @@
+// @ts-check
 import { Light } from "three";
 
 export class EnvironmentLight extends Light {
@@ -10,5 +11,6 @@ export class EnvironmentLight extends Light {
   copy(source) {
     super.copy(source);
     this.map = source.map;
+    return this;
   }
 }
