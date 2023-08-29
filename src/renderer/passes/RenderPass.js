@@ -1,5 +1,5 @@
-import { compileShader, createProgram, getAttributes } from "./glUtil";
-import { makeUniformSetter } from "./UniformSetter";
+import { compileShader, createProgram, getAttributes } from "../gl/glUtil";
+import { makeUniformSetter } from "../gl/UniformSetter";
 
 export function makeRenderPass(gl, params) {
   const { fragment, vertex } = params;

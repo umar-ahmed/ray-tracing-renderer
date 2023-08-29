@@ -1,18 +1,19 @@
-import { decomposeScene } from "./decomposeScene";
-import { makeFramebuffer } from "./Framebuffer";
-import { makeFullscreenQuad } from "./FullscreenQuad";
-import { makeGBufferPass } from "./GBufferPass";
-import { makeMaterialBuffer } from "./MaterialBuffer";
-import { mergeMeshesToGeometry } from "./mergeMeshesToGeometry";
-import { makeRayTracePass } from "./RayTracePass";
-import { makeRenderSize } from "./RenderSize";
-import { makeReprojectPass } from "./ReprojectPass";
-import { makeToneMapPass } from "./ToneMapPass";
-import { clamp, numberArraysEqual } from "./util";
-import { makeTileRender } from "./TileRender";
-import { makeDepthTarget, makeTexture } from "./Texture";
-import noiseBase64 from "./assets/noise";
 import { PerspectiveCamera, Vector2 } from "three";
+
+import { decomposeScene } from "./decomposeScene";
+import { makeFramebuffer } from "./gl/Framebuffer";
+import { makeFullscreenQuad } from "./gl/FullscreenQuad";
+import { makeGBufferPass } from "./passes/GBufferPass";
+import { makeMaterialBuffer } from "./MaterialBuffer";
+import { mergeMeshesToGeometry } from "./geometry/mergeMeshesToGeometry";
+import { makeRayTracePass } from "./passes/RayTracePass";
+import { makeRenderSize } from "./gl/RenderSize";
+import { makeReprojectPass } from "./passes/ReprojectPass";
+import { makeToneMapPass } from "./passes/ToneMapPass";
+import { clamp, numberArraysEqual } from "./utils";
+import { makeTileRender } from "./TileRender";
+import { makeDepthTarget, makeTexture } from "./texture/Texture";
+import noiseBase64 from "./assets/noise";
 
 export function makeRenderingPipeline({
   gl,

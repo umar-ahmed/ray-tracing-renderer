@@ -1,4 +1,4 @@
-import { clamp } from "./util";
+import { clamp } from "../utils";
 import * as THREE from "three";
 
 const DEFAULT_MAP_RESOLUTION = {

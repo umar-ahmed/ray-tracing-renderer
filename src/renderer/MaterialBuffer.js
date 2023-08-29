@@ -4,13 +4,13 @@ import {
   ShadowCatcherMaterial,
 } from "../constants";
 import materialBufferChunk from "./shaders/glsl/chunks/materialBuffer.glsl";
-import { makeUniformBuffer } from "./UniformBuffer";
-import { makeRenderPass } from "./RenderPass";
-import { makeTexture } from "./Texture";
+import { makeUniformBuffer } from "./gl/UniformBuffer";
+import { makeRenderPass } from "./passes/RenderPass";
+import { makeTexture } from "./texture/Texture";
 import {
   getTexturesFromMaterials,
   mergeTexturesFromMaterials,
-} from "./texturesFromMaterials";
+} from "./texture/texturesFromMaterials";
 
 export function makeMaterialBuffer(gl, materials) {
   const maps = getTexturesFromMaterials(materials, ["map", "normalMap"]);

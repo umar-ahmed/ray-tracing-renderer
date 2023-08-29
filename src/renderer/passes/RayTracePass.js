@@ -1,14 +1,14 @@
-import { bvhAccel, flattenBvh } from "./bvhAccel";
+import { bvhAccel, flattenBvh } from "../accelerators/bvhAccel";
 import {
   generateEnvMapFromSceneComponents,
   generateBackgroundMapFromSceneBackground,
-} from "./envMapCreation";
-import { envMapDistribution } from "./envMapDistribution";
-import fragment from "./shaders/glsl/rayTrace.frag";
+} from "../environment/envMapCreation";
+import { envMapDistribution } from "../environment/envMapDistribution";
+import fragment from "../shaders/glsl/rayTrace.frag";
 import { makeRenderPass } from "./RenderPass";
-import { makeStratifiedSamplerCombined } from "./StratifiedSamplerCombined";
-import { makeTexture } from "./Texture";
-import { clamp } from "./util";
+import { makeStratifiedSamplerCombined } from "../samplers/StratifiedSamplerCombined";
+import { makeTexture } from "../texture/Texture";
+import { clamp } from "../utils";
 
 export function makeRayTracePass(
   gl,

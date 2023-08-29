@@ -1,4 +1,4 @@
-import fragment from "./shaders/glsl/reproject.frag";
+import fragment from "../shaders/glsl/reproject.frag";
 import { makeRenderPass } from "./RenderPass";
 import * as THREE from "three";
 

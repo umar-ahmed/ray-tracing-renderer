@@ -1,6 +1,6 @@
 import { makeRenderPass } from "./RenderPass";
-import vertex from "./shaders/glsl/gBuffer.vert";
-import fragment from "./shaders/glsl/gBuffer.frag";
+import vertex from "../shaders/glsl/gBuffer.vert";
+import fragment from "../shaders/glsl/gBuffer.frag";
 import { Matrix4 } from "three";
 
 export function makeGBufferPass(gl, { materialBuffer, mergedMesh }) {
