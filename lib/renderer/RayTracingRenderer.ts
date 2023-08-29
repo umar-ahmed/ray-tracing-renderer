@@ -1,6 +1,7 @@
+import * as THREE from "three";
+import type { LensCamera } from "../cameras/LensCamera";
 import { loadExtensions } from "./gl/glUtil";
 import { makeRenderingPipeline } from "./RenderingPipeline";
-import * as THREE from "three";
 
 const glRequiredExtensions = [
   "EXT_color_buffer_float", // enables rendering to float buffers
@@ -11,7 +12,18 @@ const glOptionalExtensions = [
   "OES_texture_float_linear", // enables gl.LINEAR texture filtering for float textures,
 ];
 
-export class RayTracingRenderer {
+export type RayTracingRendererParams = {
+  canvas?: HTMLCanvasElement;
+  bounces?: number;
+  maxHardwareUsage?: boolean;
+  onSampleRendered?: Function;
+  renderWhenOffFocus?: boolean;
+  toneMapping?: THREE.ToneMapping;
+  toneMappingExposure?: number;
+  toneMappingWhitePoint?: number;
+};
+
+export class RayTracingRenderer implements THREE.Renderer {
   static isSupported() {
     const gl = document.createElement("canvas").getContext("webgl2", {
       failIfMajorPerformanceCaveat: true,
@@ -52,18 +64,7 @@ export class RayTracingRenderer {
   private requiredExtensions: any;
   private optionalExtensions: any;
 
-  constructor(
-    params: {
-      canvas?: HTMLCanvasElement;
-      bounces?: number;
-      maxHardwareUsage?: boolean;
-      onSampleRendered?: Function;
-      renderWhenOffFocus?: boolean;
-      toneMapping?: THREE.ToneMapping;
-      toneMappingExposure?: number;
-      toneMappingWhitePoint?: number;
-    } = {}
-  ) {
+  constructor(params: RayTracingRendererParams = {}) {
     this.domElement = params.canvas ?? document.createElement("canvas");
     this.bounces = params.bounces ?? this.bounces;
     this.maxHardwareUsage = params.maxHardwareUsage ?? this.maxHardwareUsage;
@@ -139,7 +140,7 @@ export class RayTracingRenderer {
     this.needsUpdate = false;
   }
 
-  render(scene, camera) {
+  render(scene: THREE.Scene, camera: LensCamera) {
     if (!this.renderWhenOffFocus) {
       const hasFocus = document.hasFocus();
       if (!hasFocus) {

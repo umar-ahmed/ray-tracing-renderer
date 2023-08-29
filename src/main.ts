@@ -48,7 +48,7 @@ function resize() {
 window.addEventListener("resize", resize);
 resize();
 
-const tick = (time) => {
+const tick = (time?: number) => {
   controls.update();
   camera.focus = controls.target.distanceTo(camera.position);
   stats.begin();
@@ -71,9 +71,8 @@ function makeMesh() {
 }
 
 function init() {
-  // hackily setting byte type
   const envmap = new RGBELoader()
-    .setDataType(THREE.FloatType)
+    .setDataType(THREE.FloatType) // hackily setting byte type to float type
     .load("/envmap.hdr");
   envmap.colorSpace = THREE.LinearSRGBColorSpace;
   const envLight = new EnvironmentLight(envmap);
@@ -249,7 +248,7 @@ function init() {
   {
     const geo = new THREE.PlaneGeometry(1000, 1000);
     const mat = new THREE.MeshStandardMaterial();
-    mat.shadowCatcher = true;
+    (mat as RayTracingMaterial).shadowCatcher = true;
     mat.roughness = 0.5;
     mat.metalness = 0.0;
     const mesh = new THREE.Mesh(geo, mat);
