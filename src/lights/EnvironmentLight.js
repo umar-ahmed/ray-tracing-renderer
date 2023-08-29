@@ -1,4 +1,3 @@
-// @ts-check
 import { Light } from "three";
 
 export class EnvironmentLight extends Light {

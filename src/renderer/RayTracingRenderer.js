@@ -1,5 +1,3 @@
-// @ts-check
-
 import { loadExtensions } from "./gl/glUtil";
 import { makeRenderingPipeline } from "./RenderingPipeline";
 import * as THREE from "three";

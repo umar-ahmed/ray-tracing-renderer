@@ -1,5 +1,3 @@
-// @ts-check
-
 // Reorders the elements in the range [first, last) in such a way that
 // all elements for which the comparator c returns true
 // precede the elements for which comparator c returns false.

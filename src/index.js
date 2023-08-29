@@ -1,4 +1,3 @@
-// @ts-check
 import * as constants from "./constants";
 import { LensCamera } from "./cameras/LensCamera";
 import { SoftDirectionalLight } from "./lights/SoftDirectionalLight";

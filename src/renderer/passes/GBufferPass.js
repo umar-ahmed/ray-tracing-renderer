@@ -1,4 +1,3 @@
-// @ts-check
 import { makeRenderPass } from "./RenderPass";
 import vertex from "../shaders/glsl/gBuffer.vert";
 import fragment from "../shaders/glsl/gBuffer.frag";

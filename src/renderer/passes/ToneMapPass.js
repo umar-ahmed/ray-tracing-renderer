@@ -1,4 +1,3 @@
-// @ts-check
 import fragment from "../shaders/glsl/toneMap.frag";
 import { makeRenderPass } from "./RenderPass";
 import * as THREE from "three";

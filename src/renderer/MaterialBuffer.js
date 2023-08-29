@@ -1,5 +1,3 @@
-// @ts-check
-
 import {
   ThinMaterial,
   ThickMaterial,

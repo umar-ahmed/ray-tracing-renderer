@@ -1,4 +1,3 @@
-// @ts-check
 import { clamp } from "../utils";
 import { Vector2 } from "three";
 

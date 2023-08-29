@@ -1,4 +1,3 @@
-// @ts-check
 import { bvhAccel, flattenBvh } from "../accelerators/bvhAccel";
 import {
   generateEnvMapFromSceneComponents,

@@ -1,4 +1,3 @@
-// @ts-check
 import { MeshStandardMaterial } from "three";
 
 export class RayTracingMaterial extends MeshStandardMaterial {

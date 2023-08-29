@@ -1,4 +1,3 @@
-// @ts-check
 export function makeUniformBuffer(gl, program, blockName) {
   const blockIndex = gl.getUniformBlockIndex(program, blockName);
   const blockSize = gl.getActiveUniformBlockParameter(

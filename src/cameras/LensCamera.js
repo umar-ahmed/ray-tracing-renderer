@@ -1,4 +1,3 @@
-// @ts-check
 import { PerspectiveCamera } from "three";
 
 export class LensCamera extends PerspectiveCamera {

@@ -1,4 +1,3 @@
-// @ts-check
 import { compileShader, createProgram, getAttributes } from "../gl/glUtil";
 import { makeUniformSetter } from "../gl/UniformSetter";
 

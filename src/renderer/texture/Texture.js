@@ -1,4 +1,3 @@
-// @ts-check
 import { clamp } from "../utils";
 
 export function makeTexture(gl, params) {
