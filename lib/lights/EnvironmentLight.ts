@@ -1,13 +1,16 @@
-import { Light } from "three";
+import { DataTexture, Light } from "three";
 
 export class EnvironmentLight extends Light {
-  constructor(map, ...args) {
+  public map: DataTexture;
+  public isEnvironmentLight: boolean;
+
+  constructor(map: DataTexture, ...args: any[]) {
     super(...args);
     this.map = map;
     this.isEnvironmentLight = true;
   }
 
-  copy(source) {
+  copy(source: this) {
     super.copy(source);
     this.map = source.map;
     return this;
