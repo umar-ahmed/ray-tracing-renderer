@@ -30,6 +30,7 @@
     "three": "^0.155.0"
   },
   "devDependencies": {
+    "@types/node": "^20.5.7",
     "@types/three": "^0.155.1",
     "eslint": "^7.8.1",
     "prettier": "^3.0.2",
