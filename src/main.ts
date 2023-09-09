@@ -15,6 +15,9 @@ import {
 
 const PARAMS = {
   bounces: 2,
+  cameraFov: 50,
+  cameraFocus: 10,
+  cameraAperture: 0.01,
 
   color: "#ff0055",
   roughness: 0.5,
@@ -26,6 +29,9 @@ const PARAMS = {
 const pane = new Pane();
 
 pane.addBinding(PARAMS, "bounces", { min: 0, max: 10, step: 1 });
+pane.addBinding(PARAMS, "cameraFov", { min: 0, max: 180 });
+pane.addBinding(PARAMS, "cameraFocus", { min: 0, max: 30 });
+pane.addBinding(PARAMS, "cameraAperture", { min: 0, max: 100 });
 
 pane.addBinding(PARAMS, "color");
 pane.addBinding(PARAMS, "roughness", { min: 0, max: 1 });
@@ -36,6 +42,10 @@ pane.addBinding(PARAMS, "solid");
 pane.on("change", ({ last }) => {
   if (last) {
     updateMaterial();
+    updateCamera();
+
+    renderer.bounces = PARAMS.bounces;
+    renderer.needsUpdate = true;
   }
 });
 
@@ -56,8 +66,9 @@ stats.dom.style.top = "0px";
 document.body.appendChild(stats.dom);
 
 const camera = new LensCamera();
-camera.fov = 50;
-camera.aperture = 0.01;
+camera.fov = PARAMS.cameraFov;
+camera.aperture = PARAMS.cameraAperture;
+camera.focus = PARAMS.cameraFocus;
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
@@ -114,9 +125,13 @@ function updateMaterial() {
       child.material.needsUpdate = true;
     }
   });
+}
 
-  renderer.bounces = PARAMS.bounces;
-  renderer.needsUpdate = true;
+function updateCamera() {
+  camera.fov = PARAMS.cameraFov;
+  camera.focus = PARAMS.cameraFocus;
+  camera.aperture = PARAMS.cameraAperture;
+  camera.updateProjectionMatrix();
 }
 
 function init() {
@@ -141,10 +156,21 @@ function init() {
     draco.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
     loader.setDRACOLoader(draco);
     // loader.load("/911-porsche.glb", (gltf) => {
-    //   const object = gltf.scene.children[0] as THREE.Object3D;
-    //   object.position.set(0, 7, 0);
-    //   object.scale.set(6, 6, 6);
-    //   model.add(object);
+    //   gltf.scene.children.forEach((child) => {
+    //     if (child instanceof THREE.Mesh) {
+    //       child.material = new RayTracingMaterial();
+    //       child.material.color.set(PARAMS.color);
+    //       child.material.roughness = PARAMS.roughness;
+    //       child.material.metalness = PARAMS.metalness;
+    //       child.material.transparent = PARAMS.transparent;
+    //       child.material.solid = PARAMS.solid;
+    //     }
+    //     group.add(child);
+    //   });
+    //   group.position.set(0, 7, 0);
+    //   group.scale.set(6, 6, 6);
+    //   group.updateMatrixWorld();
+    //   model.add(group);
     // });
     loader.load("/shader-ball.glb", (gltf) => {
       gltf.scene.children.forEach((child) => {
