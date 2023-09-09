@@ -1,5 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import Stats from "stats.js";
 
@@ -84,153 +86,185 @@ function init() {
   controls.target.set(0, 2, 0);
   camera.position.set(31, 21, -1);
 
-  // smooth
+  // load gltf model
   {
-    const mesh = makeMesh();
-    mesh.position.setX(-15);
-    mesh.position.setZ(15);
-    mesh.material.roughness = 0.0;
-    mesh.material.metalness = 0.0;
-    mesh.material.color.set(0xaa3333);
-    model.add(mesh);
+    const loader = new GLTFLoader();
+    const draco = new DRACOLoader();
+    draco.setDecoderConfig({ type: "js" });
+    draco.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
+    loader.setDRACOLoader(draco);
+    // loader.load("/911-porsche.glb", (gltf) => {
+    //   const object = gltf.scene.children[0] as THREE.Object3D;
+    //   object.position.set(0, 7, 0);
+    //   object.scale.set(6, 6, 6);
+    //   model.add(object);
+    // });
+    loader.load("/shader-ball.glb", (gltf) => {
+      const group = new THREE.Group();
+      gltf.scene.children.forEach((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.material = new RayTracingMaterial();
+          child.material.roughness = 0.2;
+          // child.material.metalness = 1.0;
+          child.material.color.set(0xffffff);
+          child.material.transparent = true;
+          child.material.solid = true;
+        }
+        group.add(child);
+      });
+      group.position.set(0, 0, 0);
+      group.scale.set(0.05, 0.05, 0.05);
+      model.add(group);
+    });
   }
+
+  // smooth
+  // {
+  //   const mesh = makeMesh();
+  //   mesh.position.setX(-15);
+  //   mesh.position.setZ(15);
+  //   mesh.material.roughness = 0.0;
+  //   mesh.material.metalness = 0.0;
+  //   mesh.material.color.set(0xaa3333);
+  //   model.add(mesh);
+  // }
 
   // diffuse
-  {
-    const mesh = makeMesh();
-    mesh.position.setX(-5);
-    mesh.position.setZ(15);
-    mesh.material.roughness = 1.0;
-    mesh.material.metalness = 0.0;
-    mesh.material.color.set(0x222288);
-    model.add(mesh);
-  }
+  // {
+  //   const mesh = makeMesh();
+  //   mesh.position.setX(-5);
+  //   mesh.position.setZ(15);
+  //   mesh.material.roughness = 1.0;
+  //   mesh.material.metalness = 0.0;
+  //   mesh.material.color.set(0x222288);
+  //   model.add(mesh);
+  // }
 
   // smooth metal
-  {
-    const mesh = makeMesh();
-    mesh.position.setX(5);
-    mesh.position.setZ(15);
-    mesh.material.roughness = 0.0;
-    mesh.material.metalness = 1.0;
-    mesh.material.color.set(0xaaaa33);
-    model.add(mesh);
-  }
+  // {
+  //   const mesh = makeMesh();
+  //   mesh.position.setX(5);
+  //   mesh.position.setZ(15);
+  //   mesh.material.roughness = 0.0;
+  //   mesh.material.metalness = 1.0;
+  //   mesh.material.color.set(0xaaaa33);
+  //   model.add(mesh);
+  // }
 
   //rough metal
-  {
-    const mesh = makeMesh();
-    mesh.position.setX(15);
-    mesh.position.setZ(15);
-    mesh.material.roughness = 1.0;
-    mesh.material.metalness = 1.0;
-    mesh.material.color.set(0x33aa33);
-    model.add(mesh);
-  }
+  // {
+  //   const mesh = makeMesh();
+  //   mesh.position.setX(15);
+  //   mesh.position.setZ(15);
+  //   mesh.material.roughness = 1.0;
+  //   mesh.material.metalness = 1.0;
+  //   mesh.material.color.set(0x33aa33);
+  //   model.add(mesh);
+  // }
 
   // diffuse mapping
-  {
-    const mesh = makeMesh();
-    mesh.position.setX(15);
-    mesh.position.setZ(-15);
-    mesh.material.roughness = 1.0;
-    mesh.material.metalness = 0.0;
-    mesh.material.map = new THREE.TextureLoader().load("/diffuse.png");
-    mesh.material.map.colorSpace = THREE.SRGBColorSpace;
-    model.add(mesh);
-  }
+  // {
+  //   const mesh = makeMesh();
+  //   mesh.position.setX(15);
+  //   mesh.position.setZ(-15);
+  //   mesh.material.roughness = 1.0;
+  //   mesh.material.metalness = 0.0;
+  //   mesh.material.map = new THREE.TextureLoader().load("/diffuse.png");
+  //   mesh.material.map.colorSpace = THREE.SRGBColorSpace;
+  //   model.add(mesh);
+  // }
 
   // roughness/metalness mapping
-  {
-    const mesh = makeMesh();
-    mesh.position.setX(5);
-    mesh.position.setZ(-15);
-    mesh.material.roughness = 1.0;
-    mesh.material.metalness = 1.0;
-    mesh.material.color.set(0x333333);
-    mesh.material.roughnessMap = new THREE.TextureLoader().load(
-      "/roughness.png"
-    );
-    mesh.material.metalnessMap = new THREE.TextureLoader().load(
-      "/metalness.png"
-    );
-    model.add(mesh);
-  }
+  // {
+  //   const mesh = makeMesh();
+  //   mesh.position.setX(5);
+  //   mesh.position.setZ(-15);
+  //   mesh.material.roughness = 1.0;
+  //   mesh.material.metalness = 1.0;
+  //   mesh.material.color.set(0x333333);
+  //   mesh.material.roughnessMap = new THREE.TextureLoader().load(
+  //     "/roughness.png"
+  //   );
+  //   mesh.material.metalnessMap = new THREE.TextureLoader().load(
+  //     "/metalness.png"
+  //   );
+  //   model.add(mesh);
+  // }
 
   // normal mapping
-  {
-    const mesh = makeMesh();
-    mesh.position.setX(-5);
-    mesh.position.setZ(-15);
-    mesh.material.roughness = 0.1;
-    mesh.material.metalness = 1.0;
-    mesh.material.color.set(0xcccccc);
-    mesh.material.normalMap = new THREE.TextureLoader().load("/normal.png");
-    model.add(mesh);
-  }
+  // {
+  //   const mesh = makeMesh();
+  //   mesh.position.setX(-5);
+  //   mesh.position.setZ(-15);
+  //   mesh.material.roughness = 0.1;
+  //   mesh.material.metalness = 1.0;
+  //   mesh.material.color.set(0xcccccc);
+  //   mesh.material.normalMap = new THREE.TextureLoader().load("/normal.png");
+  //   model.add(mesh);
+  // }
 
   // combined mapping
-  {
-    const mesh = makeMesh();
-    mesh.position.setX(-15);
-    mesh.position.setZ(-15);
-    mesh.material.roughness = 1.0;
-    mesh.material.metalness = 1.0;
-    mesh.material.map = new THREE.TextureLoader().load("/diffuse.png");
-    mesh.material.map.colorSpace = THREE.SRGBColorSpace;
-    mesh.material.normalMap = new THREE.TextureLoader().load("/normal.png");
-    const metalrough = new THREE.TextureLoader().load("/metalrough.png");
-    mesh.material.roughnessMap = metalrough;
-    mesh.material.metalnessMap = metalrough;
-    model.add(mesh);
-  }
+  // {
+  //   const mesh = makeMesh();
+  //   mesh.position.setX(-15);
+  //   mesh.position.setZ(-15);
+  //   mesh.material.roughness = 1.0;
+  //   mesh.material.metalness = 1.0;
+  //   mesh.material.map = new THREE.TextureLoader().load("/diffuse.png");
+  //   mesh.material.map.colorSpace = THREE.SRGBColorSpace;
+  //   mesh.material.normalMap = new THREE.TextureLoader().load("/normal.png");
+  //   const metalrough = new THREE.TextureLoader().load("/metalrough.png");
+  //   mesh.material.roughnessMap = metalrough;
+  //   mesh.material.metalnessMap = metalrough;
+  //   model.add(mesh);
+  // }
 
   // hollow glass
-  {
-    const mesh = makeMesh();
-    mesh.position.setX(-10);
-    mesh.material.transparent = true;
-    mesh.material.color.set(0xeeeeee);
-    model.add(mesh);
-  }
+  // {
+  //   const mesh = makeMesh();
+  //   mesh.position.setX(-10);
+  //   mesh.material.transparent = true;
+  //   mesh.material.color.set(0xeeeeee);
+  //   model.add(mesh);
+  // }
 
   // solid glass
-  {
-    const mesh = makeMesh();
-    mesh.position.setX(10);
-    mesh.material.transparent = true;
-    mesh.material.solid = true;
-    mesh.material.color.set(0x8888ee);
-    model.add(mesh);
-  }
+  // {
+  //   const mesh = makeMesh();
+  //   mesh.position.setX(10);
+  //   mesh.material.transparent = true;
+  //   mesh.material.solid = true;
+  //   mesh.material.color.set(0x8888ee);
+  //   model.add(mesh);
+  // }
 
   // textured glass
-  {
-    const mesh = makeMesh();
-    mesh.material.transparent = true;
-    mesh.material.solid = true;
-    mesh.material.map = new THREE.TextureLoader().load("/glass_diffuse.png");
-    mesh.material.map.colorSpace = THREE.SRGBColorSpace;
-    mesh.material.normalMap = new THREE.TextureLoader().load(
-      "/glass_normal.png"
-    );
-    mesh.material.normalScale.set(1.0, -1.0);
-    model.add(mesh);
-  }
+  // {
+  //   const mesh = makeMesh();
+  //   mesh.material.transparent = true;
+  //   mesh.material.solid = true;
+  //   mesh.material.map = new THREE.TextureLoader().load("/glass_diffuse.png");
+  //   mesh.material.map.colorSpace = THREE.SRGBColorSpace;
+  //   mesh.material.normalMap = new THREE.TextureLoader().load(
+  //     "/glass_normal.png"
+  //   );
+  //   mesh.material.normalScale.set(1.0, -1.0);
+  //   model.add(mesh);
+  // }
 
-  let unreadyMat;
-  {
-    // Create a test (non-buffer) Geometry (Actually, since r125, this produces a BufferGeometry as well :P)
-    const geo = new THREE.BoxGeometry(20, 6, 6);
-    const mat = new THREE.MeshStandardMaterial();
-    mat.roughness = 0.2;
-    mat.metalness = 0.0;
-    mat.color.set(0x993311);
-    unreadyMat = mat;
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(0, 3, 30);
-    model.add(mesh);
-  }
+  // let unreadyMat;
+  // {
+  //   // Create a test (non-buffer) Geometry (Actually, since r125, this produces a BufferGeometry as well :P)
+  //   const geo = new THREE.BoxGeometry(20, 6, 6);
+  //   const mat = new THREE.MeshStandardMaterial();
+  //   mat.roughness = 0.2;
+  //   mat.metalness = 0.0;
+  //   mat.color.set(0x993311);
+  //   unreadyMat = mat;
+  //   const mesh = new THREE.Mesh(geo, mat);
+  //   mesh.position.set(0, 3, 30);
+  //   model.add(mesh);
+  // }
 
   // background mirror
   // verifies BVH used in reflections
@@ -258,25 +292,25 @@ function init() {
 
   // test box with .visible set to false
   // should not be visible in the scene
-  {
-    const geo = new THREE.BoxGeometry(5, 5, 5);
-    const mat = new THREE.MeshStandardMaterial();
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(0, 10, 0);
-    mesh.visible = false;
-    model.add(mesh);
-  }
+  // {
+  //   const geo = new THREE.BoxGeometry(5, 5, 5);
+  //   const mat = new THREE.MeshStandardMaterial();
+  //   const mesh = new THREE.Mesh(geo, mat);
+  //   mesh.position.set(0, 10, 0);
+  //   mesh.visible = false;
+  //   model.add(mesh);
+  // }
 
   scene.add(model);
 
   THREE.DefaultLoadingManager.onLoad = () => {
     // give material an unloaded async texture. the renderer should handle this
-    unreadyMat.map = new THREE.TextureLoader().load("/diffuse.png");
-    unreadyMat.map.colorSpace = THREE.SRGBColorSpace;
-    unreadyMat.normalMap = new THREE.TextureLoader().load("/normal.png");
-    const metalrough = new THREE.TextureLoader().load("/metalrough.png");
-    unreadyMat.roughnessMap = metalrough;
-    unreadyMat.metalnessMap = metalrough;
+    // unreadyMat.map = new THREE.TextureLoader().load("/diffuse.png");
+    // unreadyMat.map.colorSpace = THREE.SRGBColorSpace;
+    // unreadyMat.normalMap = new THREE.TextureLoader().load("/normal.png");
+    // const metalrough = new THREE.TextureLoader().load("/metalrough.png");
+    // unreadyMat.roughnessMap = metalrough;
+    // unreadyMat.metalnessMap = metalrough;
 
     THREE.DefaultLoadingManager.onLoad = undefined;
     tick();
