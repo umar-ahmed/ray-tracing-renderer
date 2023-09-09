@@ -34,6 +34,7 @@
     "@tweakpane/core": "^2.0.1",
     "@types/node": "^20.5.7",
     "@types/three": "^0.155.1",
+    "tweakpane": "^4.0.1",
     "eslint": "^7.8.1",
     "prettier": "^3.0.2",
     "stats.js": "^0.17.0",
@@ -58,8 +59,5 @@
   "bugs": {
     "url": "https://github.com/hoverinc/ray-tracing-renderer/issues"
   },
-  "homepage": "https://hoverinc.github.io/ray-tracing-renderer/",
-  "dependencies": {
-    "tweakpane": "^4.0.1"
-  }
+  "homepage": "https://hoverinc.github.io/ray-tracing-renderer/"
 }
