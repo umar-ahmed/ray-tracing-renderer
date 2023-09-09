@@ -4,6 +4,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import Stats from "stats.js";
+import { Pane } from "tweakpane";
 
 import {
   RayTracingRenderer,
@@ -11,6 +12,32 @@ import {
   EnvironmentLight,
   LensCamera,
 } from "../lib";
+
+const PARAMS = {
+  bounces: 2,
+
+  color: "#ff0055",
+  roughness: 0.5,
+  metalness: 0.0,
+  transparent: false,
+  solid: false,
+};
+
+const pane = new Pane();
+
+pane.addBinding(PARAMS, "bounces", { min: 0, max: 10, step: 1 });
+
+pane.addBinding(PARAMS, "color");
+pane.addBinding(PARAMS, "roughness", { min: 0, max: 1 });
+pane.addBinding(PARAMS, "metalness", { min: 0, max: 1 });
+pane.addBinding(PARAMS, "transparent");
+pane.addBinding(PARAMS, "solid");
+
+pane.on("change", ({ last }) => {
+  if (last) {
+    updateMaterial();
+  }
+});
 
 const renderer = new RayTracingRenderer();
 renderer.setPixelRatio(1.0);
@@ -29,7 +56,7 @@ stats.dom.style.top = "0px";
 document.body.appendChild(stats.dom);
 
 const camera = new LensCamera();
-camera.fov = 70;
+camera.fov = 50;
 camera.aperture = 0.01;
 
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -72,12 +99,32 @@ function makeMesh() {
   return mesh;
 }
 
+const group = new THREE.Group();
+let envLight: EnvironmentLight;
+
+function updateMaterial() {
+  group.children.forEach((child) => {
+    if (child instanceof THREE.Mesh) {
+      child.material.color.set(PARAMS.color);
+      child.material.roughness = PARAMS.roughness;
+      child.material.metalness = PARAMS.metalness;
+      child.material.transparent = PARAMS.transparent;
+      child.material.solid = PARAMS.solid;
+
+      child.material.needsUpdate = true;
+    }
+  });
+
+  renderer.bounces = PARAMS.bounces;
+  renderer.needsUpdate = true;
+}
+
 function init() {
   const envmap = new RGBELoader()
     .setDataType(THREE.FloatType) // hackily setting byte type to float type
     .load("/envmap.hdr");
   envmap.colorSpace = THREE.LinearSRGBColorSpace;
-  const envLight = new EnvironmentLight(envmap);
+  envLight = new EnvironmentLight(envmap);
   scene.add(envLight);
 
   const model = new THREE.Object3D();
@@ -100,15 +147,14 @@ function init() {
     //   model.add(object);
     // });
     loader.load("/shader-ball.glb", (gltf) => {
-      const group = new THREE.Group();
       gltf.scene.children.forEach((child) => {
         if (child instanceof THREE.Mesh) {
           child.material = new RayTracingMaterial();
-          child.material.roughness = 0.2;
-          // child.material.metalness = 1.0;
-          child.material.color.set(0xffffff);
-          child.material.transparent = true;
-          child.material.solid = true;
+          child.material.color.set(PARAMS.color);
+          child.material.roughness = PARAMS.roughness;
+          child.material.metalness = PARAMS.metalness;
+          child.material.transparent = PARAMS.transparent;
+          child.material.solid = PARAMS.solid;
         }
         group.add(child);
       });
